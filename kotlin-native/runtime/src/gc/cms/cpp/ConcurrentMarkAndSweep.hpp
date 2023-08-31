@@ -34,7 +34,11 @@ class ConcurrentMarkAndSweep : private Pinned {
 public:
     class ThreadData : private Pinned {
     public:
-        explicit ThreadData(ConcurrentMarkAndSweep& gc, mm::ThreadData& threadData) noexcept : gc_(gc), threadData_(threadData) {}
+        explicit ThreadData(ConcurrentMarkAndSweep& gc, mm::ThreadData& threadData) noexcept
+            : gc_(gc)
+            , threadData_(threadData)
+            , barriers_(threadData) {}
+
         ~ThreadData() = default;
 
         void OnSuspendForGC() noexcept;
@@ -43,7 +47,7 @@ public:
 
         void onThreadRegistration() noexcept { barriers_.onThreadRegistration(); }
 
-        BarriersThreadData& barriers() noexcept { return barriers_; }
+        barriers::BarriersThreadData& barriers() noexcept { return barriers_; }
 
         bool tryLockRootSet();
         void publish();
@@ -56,7 +60,7 @@ public:
         friend ConcurrentMarkAndSweep;
         ConcurrentMarkAndSweep& gc_;
         mm::ThreadData& threadData_;
-        BarriersThreadData barriers_;
+        barriers::BarriersThreadData barriers_;
 
         std::atomic<bool> rootSetLocked_ = false;
         std::atomic<bool> published_ = false;

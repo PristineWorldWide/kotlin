@@ -184,17 +184,6 @@ std::vector<ObjHeader*> Alive(mm::ThreadData& threadData) {
     return alloc::test_support::allocatedObjects(threadData);
 }
 
-test_support::RegularWeakReferenceImpl& InstallWeakReference(mm::ThreadData& threadData, ObjHeader* objHeader, ObjHeader** location) {
-    mm::AllocateObject(&threadData, theRegularWeakReferenceImplTypeInfo, location);
-    auto& weakReference = test_support::RegularWeakReferenceImpl::FromObjHeader(*location);
-    auto& extraObjectData = mm::ExtraObjectData::GetOrInstall(objHeader);
-    weakReference->weakRef = static_cast<mm::RawSpecialRef*>(mm::WeakRef::create(objHeader));
-    weakReference->referred = objHeader;
-    auto* setWeakRef = extraObjectData.GetOrSetRegularWeakReferenceImpl(objHeader, weakReference.header());
-    EXPECT_EQ(setWeakRef, weakReference.header());
-    return weakReference;
-}
-
 class SameThreadMarkAndSweepTest : public testing::Test {
 public:
     ~SameThreadMarkAndSweepTest() {
@@ -330,7 +319,7 @@ TEST_F(SameThreadMarkAndSweepTest, FreeObjectWithFreeWeak) {
         auto& object1 = AllocateObject(threadData);
         auto& weak1 = ([&threadData, &object1]() -> test_support::RegularWeakReferenceImpl& {
             ObjHolder holder;
-            return InstallWeakReference(threadData, object1.header(), holder.slot());
+            return test_support::InstallWeakReference(threadData, object1.header(), holder.slot());
         })();
 
         ASSERT_THAT(Alive(threadData), testing::UnorderedElementsAre(object1.header(), weak1.header()));
@@ -349,7 +338,7 @@ TEST_F(SameThreadMarkAndSweepTest, FreeObjectWithHoldedWeak) {
     RunInNewThread([](mm::ThreadData& threadData) {
         auto& object1 = AllocateObject(threadData);
         StackObjectHolder stack{threadData};
-        auto& weak1 = InstallWeakReference(threadData, object1.header(), stack->field1.ptr());
+        auto& weak1 = test_support::InstallWeakReference(threadData, object1.header(), stack->field1.ptr());
 
         ASSERT_THAT(Alive(threadData), testing::UnorderedElementsAre(object1.header(), weak1.header(), stack.header()));
         ASSERT_THAT(gc::isMarked(object1.header()), false);
@@ -959,7 +948,7 @@ TEST_F(SameThreadMarkAndSweepTest, MultipleMutatorsWeaks) {
                 auto& object = AllocateObject(threadData);
                 auto& objectWeak = ([&threadData, &object]() -> test_support::RegularWeakReferenceImpl& {
                     ObjHolder holder;
-                    return InstallWeakReference(threadData, object.header(), holder.slot());
+                    return test_support::InstallWeakReference(threadData, object.header(), holder.slot());
                 })();
                 global->field1 = objectWeak.header();
                 weak = &objectWeak;
@@ -1024,7 +1013,7 @@ TEST_F(SameThreadMarkAndSweepTest, MultipleMutatorsWeakNewObj) {
             auto& object = AllocateObject(threadData);
             auto& objectWeak = ([&threadData, &object]() -> test_support::RegularWeakReferenceImpl& {
                 ObjHolder holder;
-                return InstallWeakReference(threadData, object.header(), holder.slot());
+                return test_support::InstallWeakReference(threadData, object.header(), holder.slot());
             })();
             EXPECT_NE(objectWeak.get(), nullptr);
 
@@ -1179,7 +1168,7 @@ TEST_F(SameThreadMarkAndSweepTest, FreeObjectWithFreeWeakReversedOrder) {
     auto f1 = mutators[1].Execute([&](mm::ThreadData& threadData, Mutator &) {
         while (object1.load() == nullptr) {}
         ObjHolder holder;
-        auto& weak_local = InstallWeakReference(threadData, object1.load()->header(), holder.slot());
+        auto& weak_local = test_support::InstallWeakReference(threadData, object1.load()->header(), holder.slot());
         weak = &weak_local;
         *holder.slot() = nullptr;
         while (!done) mm::safePoint(threadData);
