@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.analysis.api.symbols.markers.KtSymbolWithMembers
 import org.jetbrains.kotlin.analysis.api.types.KtType
 import org.jetbrains.kotlin.analysis.low.level.api.fir.api.LLFirResolveSession
 import org.jetbrains.kotlin.analysis.low.level.api.fir.api.getOrBuildFirFile
+import org.jetbrains.kotlin.analysis.low.level.api.fir.util.ContextCollector
 import org.jetbrains.kotlin.analysis.utils.errors.unexpectedElementError
 import org.jetbrains.kotlin.fir.declarations.FirClass
 import org.jetbrains.kotlin.fir.declarations.FirResolvePhase
@@ -30,6 +31,7 @@ import org.jetbrains.kotlin.fir.declarations.utils.delegateFields
 import org.jetbrains.kotlin.fir.java.JavaScopeProvider
 import org.jetbrains.kotlin.fir.java.declarations.FirJavaClass
 import org.jetbrains.kotlin.fir.resolve.ScopeSession
+import org.jetbrains.kotlin.fir.resolve.SessionHolderImpl
 import org.jetbrains.kotlin.fir.resolve.calls.FirSyntheticPropertiesScope
 import org.jetbrains.kotlin.fir.resolve.scope
 import org.jetbrains.kotlin.fir.resolve.scopeSessionKey
@@ -252,9 +254,16 @@ internal class KtFirScopeProvider(
         originalFile: KtFile,
         positionInFakeFile: KtElement
     ): KtScopeContext {
+        val fakeFile = positionInFakeFile.containingKtFile
+        val context = ContextCollector.process(
+            fakeFile.getOrBuildFirFile(firResolveSession),
+            SessionHolderImpl(analysisSession.useSiteSession, getScopeSession()),
+            positionInFakeFile
+        )
+
         val towerDataContext =
-            analysisSession.firResolveSession.getTowerContextProvider(originalFile).getClosestAvailableParentContext(positionInFakeFile)
-                ?: errorWithAttachment("Cannot find enclosing declaration for ${positionInFakeFile::class}") {
+            context?.towerDataContext
+                ?: errorWithAttachment("Cannot find context for ${positionInFakeFile::class}") {
                     withPsiEntry("positionInFakeFile", positionInFakeFile)
                 }
         val towerDataElementsIndexed = towerDataContext.towerDataElements.asReversed().withIndex()
