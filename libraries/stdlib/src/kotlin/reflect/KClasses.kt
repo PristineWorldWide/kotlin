@@ -22,7 +22,7 @@ import kotlin.internal.LowPriorityInOverloadResolution
 @SinceKotlin("1.4")
 @WasExperimental(ExperimentalStdlibApi::class)
 @LowPriorityInOverloadResolution
-fun <T : Any> KClass<T>.cast(value: Any?): T {
+public fun <T : Any> KClass<T>.cast(value: Any?): T {
     if (!isInstance(value)) throw ClassCastException("Value cannot be cast to $qualifiedOrSimpleName")
     return value as T
 }
@@ -42,6 +42,6 @@ internal expect val KClass<*>.qualifiedOrSimpleName: String?
 @SinceKotlin("1.4")
 @WasExperimental(ExperimentalStdlibApi::class)
 @LowPriorityInOverloadResolution
-fun <T : Any> KClass<T>.safeCast(value: Any?): T? {
+public fun <T : Any> KClass<T>.safeCast(value: Any?): T? {
     return if (isInstance(value)) value as T else null
 }
