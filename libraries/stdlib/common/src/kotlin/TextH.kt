@@ -85,7 +85,7 @@ expect class Regex {
     @WasExperimental(ExperimentalStdlibApi::class)
     public fun splitToSequence(input: CharSequence, limit: Int = 0): Sequence<String>
 
-    companion object {
+    public companion object {
         fun fromLiteral(literal: String): Regex
         fun escape(literal: String): String
         fun escapeReplacement(literal: String): String

@@ -8,12 +8,12 @@ package kotlin
 
 // From numbers.kt
 
-expect fun Double.isNaN(): Boolean
-expect fun Float.isNaN(): Boolean
-expect fun Double.isInfinite(): Boolean
-expect fun Float.isInfinite(): Boolean
-expect fun Double.isFinite(): Boolean
-expect fun Float.isFinite(): Boolean
+public expect fun Double.isNaN(): Boolean
+public expect fun Float.isNaN(): Boolean
+public expect fun Double.isInfinite(): Boolean
+public expect fun Float.isInfinite(): Boolean
+public expect fun Double.isFinite(): Boolean
+public expect fun Float.isFinite(): Boolean
 
 /**
  * Returns a bit representation of the specified floating-point value as [Long]
