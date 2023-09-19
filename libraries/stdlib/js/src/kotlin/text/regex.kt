@@ -314,7 +314,7 @@ public actual class Regex actual constructor(pattern: String, options: Set<Regex
      */
     public override fun toString(): String = nativePattern.toString()
 
-    actual companion object {
+    public actual companion object {
         /**
          * Returns a regular expression that matches the specified [literal] string literally.
          * No characters of that string will have special meaning when searching for an occurrence of the regular expression.
