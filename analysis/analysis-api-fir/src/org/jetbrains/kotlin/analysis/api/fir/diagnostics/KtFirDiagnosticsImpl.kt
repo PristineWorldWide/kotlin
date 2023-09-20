@@ -4219,6 +4219,20 @@ internal class JavaTypeMismatchImpl(
     token: KtLifetimeToken,
 ) : KtAbstractFirDiagnostic<KtExpression>(firDiagnostic, token), KtFirDiagnostic.JavaTypeMismatch
 
+internal class ReceiverNullabilityMismatchBasedOnJavaAnnotationsImpl(
+    override val actualType: KtType,
+    override val expectedType: KtType,
+    firDiagnostic: KtPsiDiagnostic,
+    token: KtLifetimeToken,
+) : KtAbstractFirDiagnostic<PsiElement>(firDiagnostic, token), KtFirDiagnostic.ReceiverNullabilityMismatchBasedOnJavaAnnotations
+
+internal class NullabilityMismatchBasedOnJavaAnnotationsImpl(
+    override val actualType: KtType,
+    override val expectedType: KtType,
+    firDiagnostic: KtPsiDiagnostic,
+    token: KtLifetimeToken,
+) : KtAbstractFirDiagnostic<PsiElement>(firDiagnostic, token), KtFirDiagnostic.NullabilityMismatchBasedOnJavaAnnotations
+
 internal class UpperBoundCannotBeArrayImpl(
     firDiagnostic: KtPsiDiagnostic,
     token: KtLifetimeToken,
