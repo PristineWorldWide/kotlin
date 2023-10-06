@@ -7,12 +7,12 @@ package org.jetbrains.kotlin.fir.lazy
 
 import org.jetbrains.kotlin.descriptors.*
 import org.jetbrains.kotlin.fir.backend.*
-import org.jetbrains.kotlin.fir.containingClassLookupTag
 import org.jetbrains.kotlin.fir.declarations.*
 import org.jetbrains.kotlin.fir.declarations.utils.*
 import org.jetbrains.kotlin.fir.hasEnumEntries
 import org.jetbrains.kotlin.fir.isNewPlaceForBodyGeneration
 import org.jetbrains.kotlin.fir.isSubstitutionOrIntersectionOverride
+import org.jetbrains.kotlin.fir.resolve.isRealOwner
 import org.jetbrains.kotlin.fir.scopes.FirContainingNamesAwareScope
 import org.jetbrains.kotlin.fir.scopes.processClassifiersByName
 import org.jetbrains.kotlin.fir.symbols.impl.FirNamedFunctionSymbol
@@ -192,7 +192,7 @@ class Fir2IrLazyClass(
                     when {
                         symbol.isSubstitutionOrIntersectionOverride -> {}
                         !shouldBuildStub(symbol.fir) -> {}
-                        symbol.containingClassLookupTag() != ownerLookupTag -> {}
+                        !ownerLookupTag.isRealOwner(symbol) -> {}
                         symbol.isAbstractMethodOfAny() -> {}
                         else -> {
                             result += declarationStorage.getOrCreateIrFunction(symbol.fir, this, origin)
@@ -203,7 +203,7 @@ class Fir2IrLazyClass(
                     when {
                         symbol.isSubstitutionOrIntersectionOverride -> {}
                         !shouldBuildStub(symbol.fir) -> {}
-                        symbol.containingClassLookupTag() != ownerLookupTag -> {}
+                        !ownerLookupTag.isRealOwner(symbol) -> {}
                         symbol !is FirPropertySymbol -> {}
                         else -> {
                             result += declarationStorage.getOrCreateIrProperty(symbol.fir, this, origin)

@@ -10,6 +10,7 @@ import org.jetbrains.kotlin.fir.backend.*
 import org.jetbrains.kotlin.fir.declarations.*
 import org.jetbrains.kotlin.fir.declarations.utils.*
 import org.jetbrains.kotlin.fir.resolve.defaultType
+import org.jetbrains.kotlin.fir.resolve.isRealOwner
 import org.jetbrains.kotlin.fir.resolve.toSymbol
 import org.jetbrains.kotlin.fir.scopes.*
 import org.jetbrains.kotlin.fir.scopes.impl.FirFakeOverrideGenerator
@@ -216,7 +217,7 @@ class FakeOverrideGenerator(
     }
 
     private fun FirCallableSymbol<*>.shouldHaveComputedBaseSymbolsForClass(classLookupTag: ConeClassLikeLookupTag): Boolean =
-        fir.origin.fromSupertypes && dispatchReceiverClassLookupTagOrNull() == classLookupTag
+        fir.origin.fromSupertypes && classLookupTag.isRealOwner(this)
 
     private inline fun <reified D : FirCallableDeclaration, reified S : FirCallableSymbol<D>, reified I : IrDeclaration> createFakeOverriddenIfNeeded(
         klass: FirClass,
@@ -376,7 +377,7 @@ class FakeOverrideGenerator(
 
         return scope.directOverridden(symbol).map {
             // Unwrapping should happen only for fake overrides members from the same class, not from supertypes
-            if (it.fir.isSubstitutionOverride && it.dispatchReceiverClassLookupTagOrNull() == containingClass)
+            if (it.fir.isSubstitutionOverride && containingClass.isRealOwner(it))
                 it.originalForSubstitutionOverride!!
             else
                 it

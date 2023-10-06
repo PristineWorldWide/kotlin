@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.fir.expressions.*
 import org.jetbrains.kotlin.fir.moduleData
 import org.jetbrains.kotlin.fir.resolve.defaultType
 import org.jetbrains.kotlin.fir.resolve.fullyExpandedType
+import org.jetbrains.kotlin.fir.resolve.isRealOwner
 import org.jetbrains.kotlin.fir.symbols.impl.*
 import org.jetbrains.kotlin.fir.types.*
 import org.jetbrains.kotlin.name.ClassId
@@ -453,9 +454,10 @@ object FirSerializationPluginClassChecker : FirClassChecker() {
         properties: List<FirSerializableProperty>,
         reporter: DiagnosticReporter
     ) {
+        val classLookupTag = classSymbol.toLookupTag()
         for (property in properties) {
             // Don't report anything on properties from supertypes
-            if (property.propertySymbol.dispatchReceiverClassLookupTagOrNull() != classSymbol.toLookupTag()) continue
+            if (!classLookupTag.isRealOwner(property.propertySymbol)) continue
             val customSerializerType = property.serializableWith
             val serializerSymbol = customSerializerType?.toRegularClassSymbol(session)
             val propertySymbol = property.propertySymbol
