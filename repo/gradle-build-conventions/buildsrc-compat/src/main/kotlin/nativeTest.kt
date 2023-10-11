@@ -148,7 +148,7 @@ fun Project.nativeTest(
                 val kotlinNativeCompilerEmbeddable = if (customNativeHome == null)
                     configurations.detachedConfiguration(
                         dependencies.project(":kotlin-native-compiler-embeddable"),
-                        dependencies.module(commonDependency("org.jetbrains.intellij.deps:trove4j"))
+                        dependencies.create(commonDependency("org.jetbrains.intellij.deps:trove4j"))
                     ).also { dependsOn(it) }
                 else
                     null
