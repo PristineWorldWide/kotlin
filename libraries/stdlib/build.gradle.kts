@@ -47,12 +47,12 @@ dependencies {
 }
 
 val builtinsDir = "${rootDir}/core/builtins"
-val builtinsSrcDir = "${buildDir}/src/builtin-sources"
+val builtinsSrcDir = "${layout.buildDirectory.get().asFile}/src/builtin-sources"
 
 val jsDir = "${projectDir}/js"
 
 // for js-ir
-val jsIrMainSources = "${buildDir}/src/jsMainSources"
+val jsIrMainSources = "${layout.buildDirectory.get().asFile}/src/jsMainSources"
 lateinit var jsIrTarget: KotlinJsTargetDsl
 
 val commonOptIns = listOf(
@@ -466,7 +466,7 @@ kotlin {
                     }
                 }
 
-                into("$buildDir/src/wasm-builtin-sources")
+                into(layout.buildDirectory.dir("src/wasm-builtin-sources"))
             }
 
         }
@@ -520,7 +520,7 @@ kotlin {
                 val prepareKotlinTestCommonNativeSources by tasks.registering(Sync::class) {
                     from("../kotlin.test/common/src/main/kotlin")
                     from("../kotlin.test/annotations-common/src/main/kotlin")
-                    into("$buildDir/src/native-kotlin-test-common-sources")
+                    into(layout.buildDirectory.dir("src/native-kotlin-test-common-sources"))
                 }
 
                 kotlin {
@@ -634,13 +634,13 @@ tasks {
         from(jsJar)
         rename { _ -> "full-runtime.klib" }
         // some tests expect stdlib-js klib in this location
-        into(rootProject.buildDir.resolve("js-ir-runtime"))
+        into(rootProject.layout.buildDirectory.dir("js-ir-runtime"))
     }
 
     val jsRearrangedSourcesJar by registering(Jar::class) {
         archiveClassifier.set("js-sources")
         archiveVersion.set("")
-        destinationDirectory.set(file("$buildDir/lib"))
+        destinationDirectory.set(layout.buildDirectory.dir("lib"))
 
         includeEmptyDirs = false
         duplicatesStrategy = DuplicatesStrategy.FAIL

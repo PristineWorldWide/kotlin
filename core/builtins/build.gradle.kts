@@ -1,5 +1,4 @@
 import org.gradle.api.tasks.PathSensitivity.RELATIVE
-import java.io.File
 
 plugins {
     base
@@ -13,9 +12,6 @@ val kotlinReflectJvm = fileFrom(rootDir, "libraries/stdlib/jvm/src/kotlin/reflec
 val kotlinRangesCommon = fileFrom(rootDir, "libraries/stdlib/src/kotlin/ranges")
 val kotlinCollectionsCommon = fileFrom(rootDir, "libraries/stdlib/src/kotlin/collections")
 val kotlinAnnotationsCommon = fileFrom(rootDir, "libraries/stdlib/src/kotlin/annotations")
-val builtinsCherryPicked = fileFrom(buildDir, "src/reflect")
-val rangesCherryPicked = fileFrom(buildDir, "src/ranges")
-val builtinsCherryPickedJvm = fileFrom(buildDir, "src-jvm/reflect")
 
 val runtimeElements by configurations.creating {
     isCanBeResolved = false
@@ -47,6 +43,7 @@ val prepareRangeSources by tasks.registering(Sync::class) {
         include("WasExperimental.kt")
     }
 
+    val rangesCherryPicked = layout.buildDirectory.dir("src/ranges")
     into(rangesCherryPicked)
 }
 
@@ -55,6 +52,7 @@ val prepareSources by tasks.registering(Sync::class) {
         exclude("typeOf.kt")
         exclude("KClasses.kt")
     }
+    val builtinsCherryPicked = layout.buildDirectory.dir("src/reflect")
     into(builtinsCherryPicked)
 }
 
@@ -69,13 +67,17 @@ val prepareSourcesJvm by tasks.registering(Sync::class) {
         include("KTypeParameter.kt")
         include("KVariance.kt")
     }
+    val builtinsCherryPickedJvm = layout.buildDirectory.dir("src-jvm/reflect")
     into(builtinsCherryPickedJvm)
 }
 
-fun serializeTask(name: String, sourcesTask: TaskProvider<*>, inDirs: List<File>) =
+/**
+ * @param inDirs a list of input directories. Each value is evaluated as per [Project.file].
+ */
+fun serializeTask(name: String, sourcesTask: TaskProvider<*>, inDirs: List<Any>) =
     tasks.register(name, NoDebugJavaExec::class) {
         dependsOn(sourcesTask, prepareRangeSources)
-        val outDir = buildDir.resolve(this.name)
+        val outDir = layout.buildDirectory.dir(this.name)
         inDirs.forEach { inputs.dir(it).withPathSensitivity(RELATIVE) }
         outputs.dir(outDir)
         outputs.cacheIf { true }
@@ -86,27 +88,31 @@ fun serializeTask(name: String, sourcesTask: TaskProvider<*>, inDirs: List<File>
             "-Didea.io.use.nio2=true",
             "-Dkotlin.builtins.serializer.log=true".takeIf { logger.isInfoEnabled }
         ))
-        args(
-            pathRelativeToWorkingDir(outDir),
-            *inDirs.map(::pathRelativeToWorkingDir).toTypedArray()
-        )
+
+        val inputDirectories = project.files(inDirs)
+        argumentProviders.add {
+            listOf(
+                pathRelativeToWorkingDir(outDir.get().asFile),
+                *inputDirectories.map(::pathRelativeToWorkingDir).toTypedArray()
+            )
+        }
     }
 
-val serialize = serializeTask("serialize", prepareSources, listOf(builtinsSrc, builtinsNative, builtinsCherryPicked, rangesCherryPicked))
+val serialize = serializeTask("serialize", prepareSources, listOf(builtinsSrc, builtinsNative, prepareSources.map { it.destinationDir }, prepareRangeSources.map { it.destinationDir }))
 
-val serializeJvm = serializeTask("serializeJvm", prepareSourcesJvm, listOf(builtinsSrc, builtinsNative, builtinsCherryPickedJvm, rangesCherryPicked))
+val serializeJvm = serializeTask("serializeJvm", prepareSourcesJvm, listOf(builtinsSrc, builtinsNative, prepareSourcesJvm.map { it.destinationDir }, prepareRangeSources.map { it.destinationDir }))
 
 val builtinsJar by task<Jar> {
     dependsOn(serialize)
     from(serialize) { include("kotlin/**") }
-    destinationDirectory.set(File(buildDir, "libs"))
+    destinationDirectory.set(layout.buildDirectory.dir("libs"))
 }
 
 val builtinsJvmJar by task<Jar> {
     dependsOn(serializeJvm)
     from(serializeJvm) { include("kotlin/**") }
     archiveClassifier.set("jvm")
-    destinationDirectory.set(File(buildDir, "libs"))
+    destinationDirectory.set(layout.buildDirectory.dir("libs"))
 }
 
 val assemble by tasks.getting {
@@ -125,6 +131,6 @@ publishing {
     }
 
     repositories {
-        maven("${rootProject.buildDir}/internal/repo")
+        maven(rootProject.layout.buildDirectory.dir("internal/repo"))
     }
 }

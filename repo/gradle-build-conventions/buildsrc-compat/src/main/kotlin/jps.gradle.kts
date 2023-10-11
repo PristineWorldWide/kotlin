@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.ideaExt.*
 val ideaPluginDir: File by extra
 val ideaSandboxDir: File by extra
 val ideaSdkPath: String
-    get() = rootProject.ideaHomePathForTests().absolutePath
+    get() = rootProject.ideaHomePathForTests().get().asFile.absolutePath
 
 fun updateCompilerXml() {
     val modulesExcludedFromJps = listOf(
