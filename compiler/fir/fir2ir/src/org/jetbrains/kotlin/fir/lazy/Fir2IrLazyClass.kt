@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.fir.declarations.utils.*
 import org.jetbrains.kotlin.fir.hasEnumEntries
 import org.jetbrains.kotlin.fir.isNewPlaceForBodyGeneration
 import org.jetbrains.kotlin.fir.isSubstitutionOrIntersectionOverride
-import org.jetbrains.kotlin.fir.resolve.isRealOwner
+import org.jetbrains.kotlin.fir.resolve.isRealOwnerOf
 import org.jetbrains.kotlin.fir.scopes.FirContainingNamesAwareScope
 import org.jetbrains.kotlin.fir.scopes.processClassifiersByName
 import org.jetbrains.kotlin.fir.symbols.impl.FirFieldSymbol
@@ -193,7 +193,7 @@ class Fir2IrLazyClass(
                     when {
                         symbol.isSubstitutionOrIntersectionOverride -> {}
                         !shouldBuildStub(symbol.fir) -> {}
-                        !ownerLookupTag.isRealOwner(symbol) -> {}
+                        !ownerLookupTag.isRealOwnerOf(symbol) -> {}
                         symbol.isAbstractMethodOfAny() -> {}
                         else -> {
                             result += declarationStorage.getOrCreateIrFunction(symbol.fir, this, origin)
@@ -204,7 +204,7 @@ class Fir2IrLazyClass(
                     when {
                         symbol.isSubstitutionOrIntersectionOverride -> {}
                         !shouldBuildStub(symbol.fir) -> {}
-                        !ownerLookupTag.isRealOwner(symbol) -> {}
+                        !ownerLookupTag.isRealOwnerOf(symbol) -> {}
                         symbol !is FirPropertySymbol -> {}
                         else -> {
                             result += declarationStorage.getOrCreateIrProperty(symbol.fir, this, origin)

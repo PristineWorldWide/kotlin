@@ -631,5 +631,5 @@ fun FirNamedReferenceWithCandidate.toErrorReference(diagnostic: ConeDiagnostic):
 val FirTypeParameterSymbol.defaultType: ConeTypeParameterType
     get() = ConeTypeParameterTypeImpl(toLookupTag(), isNullable = false)
 
-fun ConeClassLikeLookupTag.isRealOwner(declarationSymbol: FirCallableSymbol<*>): Boolean =
+fun ConeClassLikeLookupTag.isRealOwnerOf(declarationSymbol: FirCallableSymbol<*>): Boolean =
     this == declarationSymbol.dispatchReceiverClassLookupTagOrNull()
