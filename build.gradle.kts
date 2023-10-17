@@ -114,7 +114,10 @@ val irCompilerModules = arrayOf(
     ":compiler:ir.objcinterop",
     ":compiler:ir.backend.common",
     ":compiler:ir.interpreter",
-    ":wasm:wasm.ir"
+    ":wasm:wasm.ir",
+    ":compiler:bir",
+    ":compiler:bir.tree",
+    ":compiler:bir.backend",
 ).also { extra["irCompilerModules"] = it }
 
 val irCompilerModulesForIDE = arrayOf(
@@ -491,8 +494,8 @@ val projectsWithEnabledContextReceivers by extra {
         ":plugins:kapt4",
         ":plugins:fir-plugin-prototype",
         ":compiler:bir",
-        ":compiler:bir:tree",
-        ":compiler:bir:backend",
+        ":compiler:bir.tree",
+        ":compiler:bir.backend",
     )
 }
 
