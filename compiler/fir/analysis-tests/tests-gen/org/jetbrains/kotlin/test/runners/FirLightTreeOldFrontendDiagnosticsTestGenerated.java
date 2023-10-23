@@ -5754,6 +5754,12 @@ public class FirLightTreeOldFrontendDiagnosticsTestGenerated extends AbstractFir
                 public void testNoGenericsUnrelated() throws Exception {
                     runTest("compiler/testData/diagnostics/tests/cast/neverSucceeds/NoGenericsUnrelated.kt");
                 }
+
+                @Test
+                @TestMetadata("NullableExprToItsNonNullableGenericBaseClass.kt")
+                public void testNullableExprToItsNonNullableGenericBaseClass() throws Exception {
+                    runTest("compiler/testData/diagnostics/tests/cast/neverSucceeds/NullableExprToItsNonNullableGenericBaseClass.kt");
+                }
             }
         }
 

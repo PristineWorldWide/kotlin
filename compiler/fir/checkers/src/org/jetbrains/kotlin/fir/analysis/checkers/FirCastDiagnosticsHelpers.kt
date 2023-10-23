@@ -12,12 +12,11 @@ import org.jetbrains.kotlin.fir.expressions.*
 import org.jetbrains.kotlin.fir.resolve.defaultType
 import org.jetbrains.kotlin.fir.resolve.substitution.ConeSubstitutorByMap
 import org.jetbrains.kotlin.fir.scopes.platformClassMapper
-import org.jetbrains.kotlin.fir.symbols.impl.FirFunctionSymbol
-import org.jetbrains.kotlin.fir.symbols.impl.FirRegularClassSymbol
-import org.jetbrains.kotlin.fir.symbols.impl.FirTypeParameterSymbol
+import org.jetbrains.kotlin.fir.symbols.impl.*
 import org.jetbrains.kotlin.fir.types.*
 import org.jetbrains.kotlin.types.AbstractTypeChecker
 import org.jetbrains.kotlin.types.AbstractTypeChecker.findCorrespondingSupertypes
+import org.jetbrains.kotlin.types.TypeCheckerState
 import org.jetbrains.kotlin.types.model.typeConstructor
 
 enum class CastingType {
@@ -34,13 +33,16 @@ fun checkCasting(
 ): CastingType {
     val lhsLowerType = lhsType.lowerBoundIfFlexible()
     val rhsLowerType = rhsType.lowerBoundIfFlexible()
+
+    if (lhsLowerType is ConeErrorType || rhsLowerType is ConeErrorType) return CastingType.Possible
+
     val session = context.session
 
     if (lhsLowerType is ConeIntersectionType) {
         var result = false
         for (intersectedType in lhsLowerType.intersectedTypes) {
             val isIntersectedCastPossible = checkCasting(intersectedType, rhsLowerType, isSafeCase, context)
-            val intersectedTypeSymbol = intersectedType.toRegularClassSymbol(context.session)
+            val intersectedTypeSymbol = intersectedType.toRegularClassSymbol(session)
             if (intersectedTypeSymbol?.isInterface == false && isIntersectedCastPossible == CastingType.Impossible) {
                 return CastingType.Impossible // Any class type in intersection type should be subtype of RHS
             }
@@ -61,15 +63,29 @@ fun checkCasting(
         return if (lhsNullable) CastingType.Possible else CastingType.Impossible
     }
     if (lhsNullable && rhsNullable) return CastingType.Possible
-    val lhsClassSymbol = lhsLowerType.toRegularClassSymbol(context.session)
-    val rhsClassSymbol = rhsLowerType.toRegularClassSymbol(context.session)
-    if (isRelated(lhsLowerType, rhsLowerType, lhsClassSymbol, rhsClassSymbol, context)) return CastingType.Possible
+
     // This is an oversimplification (which does not render the method incomplete):
     // we consider any type parameter capable of taking any value, which may be made more precise if we considered bounds
     if (lhsLowerType is ConeTypeParameterType || rhsLowerType is ConeTypeParameterType) return CastingType.Possible
 
-    if (isFinal(lhsLowerType, session) || isFinal(rhsLowerType, session)) return CastingType.Impossible
-    if (lhsClassSymbol?.isInterface == true || rhsClassSymbol?.isInterface == true) return CastingType.Possible
+    val lhsClassSymbol = lhsLowerType.toRegularClassSymbol(session)
+    val rhsClassSymbol = rhsLowerType.toRegularClassSymbol(session)
+    val lhsNormalizedType = getCorrespondingKotlinClass(lhsClassSymbol?.defaultType() ?: lhsLowerType, session)
+    val rhsNormalizedType = getCorrespondingKotlinClass(rhsClassSymbol?.defaultType() ?: rhsLowerType, session)
+
+    val state = session.typeContext.newTypeCheckerState(errorTypesEqualToAnything = false, stubTypesEqualToAnything = false)
+    if (isRelated(lhsNormalizedType, rhsNormalizedType, state, session) ||
+        isRelated(rhsNormalizedType, lhsNormalizedType, state, session)
+    ) {
+        return CastingType.Possible
+    }
+
+    if (isFinal(lhsNormalizedType, session) || isFinal(rhsNormalizedType, session)) return CastingType.Impossible
+
+    val lhsNormalizedTypeSymbol = lhsNormalizedType.toSymbol(session) as? FirClassSymbol<*>
+    val rhsNormalizedTypeSymbol = rhsNormalizedType.toSymbol(session) as? FirClassSymbol<*>
+    if (lhsNormalizedTypeSymbol?.isInterface == true || rhsNormalizedTypeSymbol?.isInterface == true) return CastingType.Possible
+
     return CastingType.Impossible
 }
 
@@ -82,30 +98,26 @@ fun checkCasting(
  * Due to limitations in PlatformToKotlinClassMap, we only consider mapping of platform classes to Kotlin classed
  * (i.e. java.lang.String -> kotlin.String) and ignore mappings that go the other way.
  */
-private fun isRelated(
-    aType: ConeSimpleKotlinType,
-    bType: ConeSimpleKotlinType,
-    aClassSymbol: FirRegularClassSymbol?,
-    bClassSymbol: FirRegularClassSymbol?,
-    context: CheckerContext
-): Boolean {
-    val typeContext = context.session.typeContext
+private fun isRelated(type: ConeKotlinType, superType: ConeKotlinType, state: TypeCheckerState, session: FirSession): Boolean {
+    if (type !is ConeClassLikeType) return false
 
-    if (AbstractTypeChecker.isSubtypeOf(typeContext, aType, bType) ||
-        AbstractTypeChecker.isSubtypeOf(typeContext, bType, aType)
-    ) {
-        return true
-    }
+    var result = false
+    val superTypeConstructor = superType.typeConstructor(state.typeSystemContext)
+    state.anySupertype(type, { typeMarker ->
+        val correspondingKotlinClass = getCorrespondingKotlinClass(typeMarker as ConeKotlinType, session)
+        if (correspondingKotlinClass.typeConstructor(state.typeSystemContext) == superTypeConstructor) {
+            result = true
+            true
+        } else {
+            false
+        }
+    }, { TypeCheckerState.SupertypesPolicy.LowerIfFlexible })
 
-    fun getCorrespondingKotlinClass(type: ConeSimpleKotlinType): ConeKotlinType {
-        return context.session.platformClassMapper.getCorrespondingKotlinClass(type.classId)?.defaultType(listOf()) ?: type
-    }
+    return result
+}
 
-    val aNormalizedType = getCorrespondingKotlinClass(aClassSymbol?.defaultType() ?: aType)
-    val bNormalizedType = getCorrespondingKotlinClass(bClassSymbol?.defaultType() ?: bType)
-
-    return AbstractTypeChecker.isSubtypeOf(typeContext, aNormalizedType, bNormalizedType) ||
-            AbstractTypeChecker.isSubtypeOf(typeContext, bNormalizedType, aNormalizedType)
+private fun getCorrespondingKotlinClass(type: ConeKotlinType, session: FirSession): ConeKotlinType {
+    return session.platformClassMapper.getCorrespondingKotlinClass(type.classId)?.defaultType(listOf()) ?: type
 }
 
 private fun isFinal(type: ConeSimpleKotlinType, session: FirSession): Boolean {
