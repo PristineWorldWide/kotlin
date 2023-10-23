@@ -82,8 +82,11 @@ class FirProviderImpl(val session: FirSession, val kotlinScopeProvider: FirKotli
         }
 
         override val symbolNamesProvider: FirSymbolNamesProvider = object : FirSymbolNamesProvider() {
-            override fun getPackageNamesWithTopLevelCallables(): Set<String> =
+            override fun getPackageNames(): Set<String> =
                 state.allSubPackages.mapTo(mutableSetOf()) { it.asString() }
+
+            override val hasSpecificClassifierPackageNamesComputation: Boolean get() = false
+            override val hasSpecificCallablePackageNamesComputation: Boolean get() = false
 
             override fun getTopLevelClassifierNamesInPackage(packageFqName: FqName): Set<Name> =
                 state.classifierInPackage[packageFqName].orEmpty()

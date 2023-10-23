@@ -98,7 +98,16 @@ public class KotlinStaticDeclarationProvider internal constructor(
         return index.scriptMap[scriptFqName].orEmpty().filter { it.containingKtFile.virtualFile in scope }
     }
 
-    override fun computePackageSetWithTopLevelCallableDeclarations(): Set<String> {
+    override val hasSpecificClassifierPackageNamesComputation: Boolean get() = true
+
+    override fun computePackageNamesWithTopLevelClassifiers(): Set<String>? {
+        val packageNames = index.classMap.keys + index.typeAliasMap.keys
+        return packageNames.mapTo(mutableSetOf()) { it.asString() }
+    }
+
+    override val hasSpecificCallablePackageNamesComputation: Boolean get() = true
+
+    override fun computePackageNamesWithTopLevelCallables(): Set<String> {
         val packageNames = index.topLevelPropertyMap.keys + index.topLevelFunctionMap.keys
         return packageNames.mapTo(mutableSetOf()) { it.asString() }
     }

@@ -157,6 +157,11 @@ class NativeForwardDeclarationsSymbolProvider(
     }
 
     override val symbolNamesProvider: FirSymbolNamesProvider = object : FirSymbolNamesProviderWithoutCallables() {
+        override val hasSpecificClassifierPackageNamesComputation: Boolean get() = true
+
+        override fun getPackageNamesWithTopLevelClassifiers(): Set<String>? =
+            includedForwardDeclarationsByPackage.keys.mapTo(mutableSetOf()) { it.asString() }
+
         override fun getTopLevelClassifierNamesInPackage(packageFqName: FqName): Set<Name> =
             includedForwardDeclarationsByPackage[packageFqName].orEmpty()
     }
