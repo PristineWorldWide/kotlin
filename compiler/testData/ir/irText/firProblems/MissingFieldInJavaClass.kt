@@ -10,6 +10,7 @@
 
 class J {
     public int f = 0;
+    public static int s = 0;
 }
 
 // FILE: X.java

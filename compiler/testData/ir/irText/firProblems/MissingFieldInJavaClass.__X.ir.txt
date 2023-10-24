@@ -18,3 +18,7 @@ CLASS IR_EXTERNAL_JAVA_DECLARATION_STUB CLASS name:X modality:OPEN visibility:pu
     overridden:
       public final f: kotlin.Int [var]
     FIELD IR_EXTERNAL_JAVA_DECLARATION_STUB name:f type:kotlin.Int visibility:public
+  PROPERTY IR_EXTERNAL_JAVA_DECLARATION_STUB name:s visibility:public modality:FINAL [fake_override,var]
+    overridden:
+      public final s: kotlin.Int [var]
+    FIELD IR_EXTERNAL_JAVA_DECLARATION_STUB name:s type:kotlin.Int visibility:public [static]
