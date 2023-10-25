@@ -181,6 +181,7 @@ class FusStatisticsIT : KGPDaemonsBaseTest() {
                     fusStatisticsPath,
                     "CONFIGURATION_IMPLEMENTATION_COUNT=2",
                     "NUMBER_OF_SUBPROJECTS=2",
+                    "COMPILATIONS_COUNT=2"
                 )
             }
         }

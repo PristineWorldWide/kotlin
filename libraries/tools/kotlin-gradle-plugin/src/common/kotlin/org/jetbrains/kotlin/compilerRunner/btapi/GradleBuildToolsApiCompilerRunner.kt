@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.gradle.plugin.BuildFinishedListenerService
 import org.jetbrains.kotlin.gradle.plugin.internal.BuildIdService
 import org.jetbrains.kotlin.gradle.tasks.GradleCompileTaskProvider
 import org.jetbrains.kotlin.gradle.tasks.TaskOutputsBackup
+import org.jetbrains.kotlin.statistics.metrics.IStatisticsValuesConsumer
 import java.io.File
 
 internal class GradleBuildToolsApiCompilerRunner(
@@ -31,7 +32,8 @@ internal class GradleBuildToolsApiCompilerRunner(
     private val cachedClassLoadersService: Provider<ClassLoadersCachingBuildService>,
     private val buildFinishedListenerService: Provider<BuildFinishedListenerService>,
     private val buildIdService: Provider<BuildIdService>,
-) : GradleCompilerRunner(taskProvider, jdkToolsJar, compilerExecutionSettings, buildMetrics) {
+    fusMetricsConsumer: IStatisticsValuesConsumer?,
+) : GradleCompilerRunner(taskProvider, jdkToolsJar, compilerExecutionSettings, buildMetrics, fusMetricsConsumer) {
 
 
     override fun runCompilerAsync(

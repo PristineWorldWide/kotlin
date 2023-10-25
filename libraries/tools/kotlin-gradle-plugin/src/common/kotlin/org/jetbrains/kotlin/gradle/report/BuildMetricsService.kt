@@ -8,7 +8,6 @@ package org.jetbrains.kotlin.gradle.report
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.file.DirectoryProperty
-import org.gradle.api.invocation.Gradle
 import org.gradle.api.logging.Logging
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
@@ -32,7 +31,6 @@ import org.jetbrains.kotlin.gradle.plugin.internal.state.TaskExecutionResults
 import org.jetbrains.kotlin.build.report.statistics.BuildStartParameters
 import org.jetbrains.kotlin.build.report.statistics.StatTag
 import org.jetbrains.kotlin.buildtools.api.SourcesChanges
-import org.jetbrains.kotlin.gradle.plugin.statistics.KotlinBuildStatsService
 import org.jetbrains.kotlin.gradle.report.BuildReportsService.Companion.getStartParameters
 import org.jetbrains.kotlin.gradle.report.data.BuildOperationRecord
 import org.jetbrains.kotlin.gradle.tasks.withType
@@ -42,8 +40,13 @@ import org.jetbrains.kotlin.statistics.metrics.NumericalMetrics
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedQueue
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.plugin.StatisticsBuildFlowManager
 import org.jetbrains.kotlin.gradle.plugin.internal.isConfigurationCacheRequested
+import org.jetbrains.kotlin.gradle.plugin.statistics.BuildFusService
+import org.jetbrains.kotlin.statistics.metrics.IStatisticsValuesConsumer
+import org.jetbrains.kotlin.statistics.metrics.StringMetrics
 import java.lang.management.ManagementFactory
+import kotlin.reflect.KProperty0
 
 internal interface UsesBuildMetricsService : Task {
     @get:Internal
@@ -63,6 +66,8 @@ abstract class BuildMetricsService : BuildService<BuildMetricsService.Parameters
         val projectName: Property<String>
         val kotlinVersion: Property<String>
         val buildConfigurationTags: ListProperty<StatTag>
+
+        val fusMetricsConsumer: Property<IStatisticsValuesConsumer?>
     }
 
     private val log = Logging.getLogger(this.javaClass)
@@ -114,7 +119,7 @@ abstract class BuildMetricsService : BuildService<BuildMetricsService.Parameters
         taskExecutionResult?.buildMetrics?.also {
             buildMetrics.addAll(it)
 
-            KotlinBuildStatsService.applyIfInitialised { collector ->
+           parameters.fusMetricsConsumer.orNull?.also { collector ->
                 collector.report(NumericalMetrics.COMPILATION_DURATION, totalTimeMs)
                 collector.report(BooleanMetrics.KOTLIN_COMPILATION_FAILED, event.result is FailureResult)
                 val metricsMap = buildMetrics.buildPerformanceMetrics.asMap()
@@ -201,6 +206,12 @@ abstract class BuildMetricsService : BuildService<BuildMetricsService.Parameters
                 return null
             }
 
+            val buildFusService =
+                project.gradle.sharedServices.registrations.findByName(BuildFusService.serviceName)!!.let {
+                    @Suppress("UNCHECKED_CAST")
+                    it.service as Provider<BuildFusService>
+                }
+
             val kotlinVersion = project.getKotlinPluginVersion()
 
             return project.gradle.sharedServices.registerIfAbsent(serviceName, serviceClass) {
@@ -221,8 +232,10 @@ abstract class BuildMetricsService : BuildService<BuildMetricsService.Parameters
                 it.parameters.projectDir.set(project.rootProject.layout.projectDirectory)
                 //init gradle tags for build scan and http reports
                 it.parameters.buildConfigurationTags.value(setupTags(project))
+                it.parameters.fusMetricsConsumer.set(buildFusService.map { it.getFusMetricsConsumer() ?: DummyStatisticsValuesConsumer() })
             }.also {
                 subscribeForTaskEvents(project, it)
+                project.gradle.sharedServices.registrations.findByName(BuildFusService.serviceName) as BuildFusService?
             }
 
         }
@@ -281,18 +294,21 @@ abstract class BuildMetricsService : BuildService<BuildMetricsService.Parameters
 
                     })
                 }
-                else -> {}//do nothing, BuildScanFlowAction is used
-            }
-        }
-
-        fun registerIfAbsent(project: Project) = registerIfAbsentImpl(project)?.also { serviceProvider ->
-            SingleActionPerProject.run(project, UsesBuildMetricsService::class.java.name) {
-                project.tasks.withType<UsesBuildMetricsService>().configureEach { task ->
-                    task.buildMetricsService.value(serviceProvider).disallowChanges()
-                    task.usesService(serviceProvider)
+                else -> {
+                    StatisticsBuildFlowManager.getInstance(project).subscribeForBuildScan(buildScanHolder)
                 }
             }
         }
+
+        fun registerIfAbsent(project: Project) =
+            registerIfAbsentImpl(project)?.also { serviceProvider ->
+                SingleActionPerProject.run(project, UsesBuildMetricsService::class.java.name) {
+                    project.tasks.withType<UsesBuildMetricsService>().configureEach { task ->
+                        task.buildMetricsService.value(serviceProvider).disallowChanges()
+                        task.usesService(serviceProvider)
+                    }
+                }
+            }
 
         private fun setupTags(project: Project): ArrayList<StatTag> {
             val gradle = project.gradle
@@ -349,3 +365,23 @@ private class TransformRecord(
     override val skipMessage: String? = null
     override val icLogLines: List<String> = emptyList()
 }
+
+internal class DummyStatisticsValuesConsumer : IStatisticsValuesConsumer {
+    override fun report(metric: BooleanMetrics, value: Boolean, subprojectName: String?, weight: Long?): Boolean {
+        //do nothing
+        return true
+    }
+
+    override fun report(metric: NumericalMetrics, value: Long, subprojectName: String?, weight: Long?): Boolean {
+        //do nothing
+        return true
+    }
+
+    override fun report(metric: StringMetrics, value: String, subprojectName: String?, weight: Long?): Boolean {
+        //do nothing
+        return true
+    }
+
+}
+
+
