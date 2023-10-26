@@ -31,8 +31,8 @@ fun checkCasting(
     isSafeCase: Boolean,
     context: CheckerContext
 ): CastingType {
-    val lhsLowerType = lhsType.lowerBoundIfFlexible()
-    val rhsLowerType = rhsType.lowerBoundIfFlexible()
+    val lhsLowerType = lhsType.lowerBoundIfFlexible().originalIfDefinitelyNotNullable()
+    val rhsLowerType = rhsType.lowerBoundIfFlexible().originalIfDefinitelyNotNullable()
 
     if (lhsLowerType is ConeErrorType || rhsLowerType is ConeErrorType) return CastingType.Possible
 
@@ -120,7 +120,7 @@ private fun getCorrespondingKotlinClass(type: ConeKotlinType, session: FirSessio
     return session.platformClassMapper.getCorrespondingKotlinClass(type.classId)?.defaultType(listOf()) ?: type
 }
 
-private fun isFinal(type: ConeSimpleKotlinType, session: FirSession): Boolean {
+private fun isFinal(type: ConeKotlinType, session: FirSession): Boolean {
     return !type.canHaveSubtypes(session)
 }
 
