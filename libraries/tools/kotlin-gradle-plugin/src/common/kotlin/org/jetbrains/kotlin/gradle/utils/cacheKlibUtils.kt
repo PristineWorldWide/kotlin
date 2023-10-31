@@ -94,6 +94,7 @@ internal fun getDependenciesCacheDirectories(
                 }
             }
         }
+        .distinct()
         .filterNotNull()
         .filter { it.exists() }
 }

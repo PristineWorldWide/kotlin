@@ -8,6 +8,7 @@ package org.jetbrains.kotlin.gradle.native
 import org.gradle.util.GradleVersion
 import org.jetbrains.kotlin.gradle.dsl.NativeCacheKind
 import org.jetbrains.kotlin.gradle.testbase.*
+import org.jetbrains.kotlin.gradle.util.capitalize
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.condition.OS
 import kotlin.io.path.appendText
@@ -86,6 +87,37 @@ internal class KotlinNativeLinkIT : KGPBaseTest() {
                 extractNativeTasksCommandLineArgumentsFromOutput(":linkDebugTestHost") {
                     assertCommandLineArgumentsContain("-Xpartial-linkage=ENABLE")
                 }
+            }
+        }
+    }
+
+    @DisplayName("KT-61567: test checks that build with cache does not produce \"library included more than once\" warning")
+    @GradleTest
+    @GradleTestVersions(minVersion = TestVersions.Gradle.MAX_SUPPORTED)
+    @OsCondition(
+        // Don't run it on Windows. Caches are not supported there yet
+        supportedOn = [OS.LINUX, OS.MAC],
+        enabledOnCI = [OS.LINUX, OS.MAC]
+    )
+    fun librariesDoesNotIncludedMoreThanOnceWithBuildCache(gradleVersion: GradleVersion) {
+        nativeProject(
+            "kt-61567-link-native-with-cache",
+            gradleVersion = gradleVersion,
+            buildOptions = defaultBuildOptions.copy(
+                // KT-61567 only reproduces when the build cache is enabled,
+                buildCacheEnabled = true,
+                freeArgs = defaultBuildOptions.freeArgs + "--rerun-tasks",
+                nativeOptions = defaultBuildOptions.nativeOptions.copy(
+                    cacheKind = NativeCacheKind.STATIC,
+                    // Required as this only reproduces from CacheBuilder.
+                    cacheOrchestration = "gradle"
+                )
+            ),
+        ) {
+
+            val linkTargetName = MPPNativeTargets.current.capitalize()
+            build("link$linkTargetName") {
+                assertNoBuildWarnings()
             }
         }
     }

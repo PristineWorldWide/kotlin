@@ -909,6 +909,7 @@ internal class CacheBuilder(
                 .flatMap { getArtifacts(it) }
                 .map { it.file }
                 .filterKlibsPassedToCompiler()
+                .distinct()
                 .forEach {
                     args += "-l"
                     args += it.absolutePath
