@@ -537,7 +537,7 @@ private val suspendFunctionsLoweringPhase = makeJsModulePhase(
         }
     },
     name = "SuspendFunctionsLowering",
-    description = "Transform suspend functions into CoroutineImpl instance and build state machine"
+    description = "Transform suspend functions into CoroutineImpl instance and build state machine or into GeneratorCoroutineImpl and ES2015 generators"
 ).toModuleLowering()
 
 private val addContinuationToNonLocalSuspendFunctionsLoweringPhase = makeDeclarationTransformerPhase(
