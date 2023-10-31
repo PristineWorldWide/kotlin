@@ -1,8 +1,8 @@
-@R|lowlevel/Anno|(prop#)  kotlin/collections/List<@R|lowlevel/Anno|(prop#)  ERROR CLASS: Symbol not found for Type>
+@R|lowlevel/Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|lowlevel/Anno|(LAZY_EXPRESSION)  ERROR CLASS: Symbol not found for Type>
   context -> FirNamedFunctionSymbol lowlevel/function
   anchor -> [FirNamedFunctionSymbol lowlevel/function]
 
-@R|lowlevel/Anno|(prop#)  ERROR CLASS: Symbol not found for Type
+@R|lowlevel/Anno|(LAZY_EXPRESSION)  ERROR CLASS: Symbol not found for Type
   context -> FirNamedFunctionSymbol lowlevel/function
   anchor -> []
 
@@ -18,4 +18,4 @@ FILE: [ResolvedTo(IMPORTS)] nestedErrorReturnType.kt
     }
     public? final? const [ResolvedTo(RAW_FIR)] val prop: <implicit> = LAZY_EXPRESSION
         public? [ResolvedTo(RAW_FIR)] get(): <implicit>
-    public? final? [ResolvedTo(TYPES)] fun function(): R|@R|lowlevel/Anno|(prop#)  kotlin/collections/List<@R|lowlevel/Anno|(prop#)  ERROR CLASS: Symbol not found for Type>| { LAZY_BLOCK }
+    public? final? [ResolvedTo(TYPES)] fun function(): R|@R|lowlevel/Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|lowlevel/Anno|(LAZY_EXPRESSION)  ERROR CLASS: Symbol not found for Type>| { LAZY_BLOCK }

@@ -1,41 +1,41 @@
-@R|second/Anno|(<strcat>(String(type param: ), constant#))  kotlin/collections/List<@R|second/Anno|(<strcat>(String(nested type param: ), constant#))  kotlin/collections/Collection<@R|second/Anno|(<strcat>(String(nested nested type param: ), constant#))  kotlin/String>>
+@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/Collection<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/String>>
   context -> FirNamedFunctionSymbol second/SubClass.resolveMe
   anchor -> [FirRegularClassSymbol second/SubClass]
 
-@R|second/Anno|(<strcat>(String(nested type param: ), constant#))  kotlin/collections/Collection<@R|second/Anno|(<strcat>(String(nested nested type param: ), constant#))  kotlin/String>
+@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/Collection<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/String>
   context -> FirNamedFunctionSymbol second/SubClass.resolveMe
   anchor -> [FirRegularClassSymbol second/SubClass]
 
-@R|second/Anno|(<strcat>(String(nested nested type param: ), constant#))  kotlin/String
+@R|second/Anno|(LAZY_EXPRESSION)  kotlin/String
   context -> FirNamedFunctionSymbol second/SubClass.resolveMe
   anchor -> [FirRegularClassSymbol second/SubClass]
 
-@R|second/Anno|(<strcat>(String(type param: ), constant#))  kotlin/collections/List<@R|second/Anno|(<strcat>(String(nested type param: ), constant#))  kotlin/collections/Collection<@R|second/Anno|(<strcat>(String(nested nested type param: ), constant#))  kotlin/String>>
+@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/Collection<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/String>>
   context -> FirNamedFunctionSymbol second/SubClass.resolveMe
   anchor -> [FirRegularClassSymbol second/SubClass]
 
-@R|second/Anno|(<strcat>(String(nested type param: ), constant#))  kotlin/collections/Collection<@R|second/Anno|(<strcat>(String(nested nested type param: ), constant#))  kotlin/String>
+@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/Collection<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/String>
   context -> FirNamedFunctionSymbol second/SubClass.resolveMe
   anchor -> [FirRegularClassSymbol second/SubClass]
 
-@R|second/Anno|(<strcat>(String(nested nested type param: ), constant#))  kotlin/String
+@R|second/Anno|(LAZY_EXPRESSION)  kotlin/String
   context -> FirNamedFunctionSymbol second/SubClass.resolveMe
   anchor -> [FirRegularClassSymbol second/SubClass]
 
-@R|second/Anno|(<strcat>(String(type param: ), constant#))  kotlin/collections/List<@R|second/Anno|(<strcat>(String(nested type param: ), constant#))  kotlin/collections/Collection<@R|second/Anno|(<strcat>(String(nested nested type param: ), constant#))  kotlin/String>>
+@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/Collection<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/String>>
   context -> FirValueParameterSymbol <local>/param from FirNamedFunctionSymbol second/SubClass.resolveMe
   anchor -> [FirRegularClassSymbol second/SubClass]
 
-@R|second/Anno|(<strcat>(String(nested type param: ), constant#))  kotlin/collections/Collection<@R|second/Anno|(<strcat>(String(nested nested type param: ), constant#))  kotlin/String>
+@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/Collection<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/String>
   context -> FirValueParameterSymbol <local>/param from FirNamedFunctionSymbol second/SubClass.resolveMe
   anchor -> [FirRegularClassSymbol second/SubClass]
 
-@R|second/Anno|(<strcat>(String(nested nested type param: ), constant#))  kotlin/String
+@R|second/Anno|(LAZY_EXPRESSION)  kotlin/String
   context -> FirValueParameterSymbol <local>/param from FirNamedFunctionSymbol second/SubClass.resolveMe
   anchor -> [FirRegularClassSymbol second/SubClass]
 
 
-TARGET: public abstract [ResolvedTo(STATUS)] [SubstitutedOverrideOriginalKey=second/AbstractClass.resolveMe] fun R|@R|second/Anno|(<strcat>(String(type param: ), constant#))  kotlin/collections/List<@R|second/Anno|(<strcat>(String(nested type param: ), constant#))  kotlin/collections/Collection<@R|second/Anno|(<strcat>(String(nested nested type param: ), constant#))  kotlin/String>>|.resolveMe([ResolvedTo(STATUS)] [SubstitutedOverrideOriginalKey=<local>/param] param: R|@R|second/Anno|(<strcat>(String(type param: ), constant#))  kotlin/collections/List<@R|second/Anno|(<strcat>(String(nested type param: ), constant#))  kotlin/collections/Collection<@R|second/Anno|(<strcat>(String(nested nested type param: ), constant#))  kotlin/String>>|): R|@R|second/Anno|(<strcat>(String(type param: ), constant#))  kotlin/collections/List<@R|second/Anno|(<strcat>(String(nested type param: ), constant#))  kotlin/collections/Collection<@R|second/Anno|(<strcat>(String(nested nested type param: ), constant#))  kotlin/String>>|
+TARGET: public abstract [ResolvedTo(STATUS)] [SubstitutedOverrideOriginalKey=second/AbstractClass.resolveMe] fun R|@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/Collection<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/String>>|.resolveMe([ResolvedTo(STATUS)] [SubstitutedOverrideOriginalKey=<local>/param] param: R|@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/Collection<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/String>>|): R|@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/Collection<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/String>>|
 FILE: [ResolvedTo(IMPORTS)] functionScript.kts
     context(<script>@kotlin.script.templates.standard.ScriptTemplateWithArgs)
     SCRIPT: [ResolvedTo(RAW_FIR)] <script-functionScript.kts>
@@ -54,9 +54,9 @@ FILE: [ResolvedTo(IMPORTS)] functionScript.kts
         public? final? const [ResolvedTo(RAW_FIR)] val constant: <implicit> = LAZY_EXPRESSION
             public? [ResolvedTo(RAW_FIR)] get(): <implicit>
 
-        public abstract [ResolvedTo(STATUS)] class SubClass : R|second/AbstractClass<@R|second/Anno|(<strcat>(String(type param: ), constant#))  kotlin/collections/List<@R|second/Anno|(<strcat>(String(nested type param: ), constant#))  kotlin/collections/Collection<@R|second/Anno|(<strcat>(String(nested nested type param: ), constant#))  kotlin/String>>>| {
+        public abstract [ResolvedTo(STATUS)] class SubClass : R|second/AbstractClass<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/Collection<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/String>>>| {
             public [ResolvedTo(STATUS)] [ContainingClassKey=SubClass] constructor(): R|second/SubClass| {
-                LAZY_super<R|second/AbstractClass<@R|second/Anno|(<strcat>(String(type param: ), constant#))  kotlin/collections/List<@R|second/Anno|(<strcat>(String(nested type param: ), constant#))  kotlin/collections/Collection<@R|second/Anno|(<strcat>(String(nested nested type param: ), constant#))  kotlin/String>>>|>
+                LAZY_super<R|second/AbstractClass<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/Collection<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/String>>>|>
             }
 
         }

@@ -355,24 +355,24 @@ FILE: [ResolvedTo(IMPORTS)] propertyWithImplicitTypeScript.kts
                 LAZY_super<<implicit>>
             }
 
-            public final [ResolvedTo(CONTRACTS)] fun explicitType(): R|@R|Anno|(<strcat>(String(explicitType return type ), prop#))  kotlin/collections/List<@R|Anno|(<strcat>(String(explicitType nested return type ), prop#))  kotlin/collections/List<@R|Anno|(<strcat>(String(explicitType nested nested return type ), prop#))  kotlin/Int>>| {
+            public final [ResolvedTo(CONTRACTS)] fun explicitType(): R|@R|Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/Int>>| {
                 ^explicitType IntegerLiteral(1)
             }
 
-            public open override operator [ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] fun getValue([ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] thisRef: R|kotlin/Any?|, [ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] property: R|kotlin/reflect/KProperty<*>|): R|@R|Anno|(<strcat>(String(explicitType return type ), prop#))  kotlin/collections/List<@R|Anno|(<strcat>(String(explicitType nested return type ), prop#))  kotlin/collections/List<@R|Anno|(<strcat>(String(explicitType nested nested return type ), prop#))  kotlin/Int>>| {
+            public open override operator [ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] fun getValue([ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] thisRef: R|kotlin/Any?|, [ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] property: R|kotlin/reflect/KProperty<*>|): R|@R|Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/Int>>| {
                 ^getValue this@R|/Delegate|.R|/Delegate.explicitType|()
             }
 
-            public open override operator [ResolvedTo(CONTRACTS)] fun setValue([ResolvedTo(CONTRACTS)] thisRef: R|kotlin/Any?|, [ResolvedTo(CONTRACTS)] property: R|kotlin/reflect/KProperty<*>|, [ResolvedTo(CONTRACTS)] value: R|@R|Anno|(<strcat>(String(setValue type ref ), prop#))  kotlin/collections/List<@R|Anno|(<strcat>(String(setValue nested type ref ), prop#))  kotlin/collections/List<@R|Anno|(<strcat>(String(setValue nested nested type ref ), prop#))  kotlin/Int>>|): R|kotlin/Unit| {
+            public open override operator [ResolvedTo(CONTRACTS)] fun setValue([ResolvedTo(CONTRACTS)] thisRef: R|kotlin/Any?|, [ResolvedTo(CONTRACTS)] property: R|kotlin/reflect/KProperty<*>|, [ResolvedTo(CONTRACTS)] value: R|@R|Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/Int>>|): R|kotlin/Unit| {
             }
 
         }
 
-        public final [ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] var propertyToResolve: R|@R|Anno|(<strcat>(String(explicitType return type ), prop#))  kotlin/collections/List<@R|Anno|(<strcat>(String(explicitType nested return type ), prop#))  kotlin/collections/List<@R|Anno|(<strcat>(String(explicitType nested nested return type ), prop#))  kotlin/Int>>|by R|/Delegate.Delegate|()
-            public [ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] get(): R|@R|Anno|(<strcat>(String(explicitType return type ), prop#))  kotlin/collections/List<@R|Anno|(<strcat>(String(explicitType nested return type ), prop#))  kotlin/collections/List<@R|Anno|(<strcat>(String(explicitType nested nested return type ), prop#))  kotlin/Int>>| {
+        public final [ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] var propertyToResolve: R|@R|Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/Int>>|by R|/Delegate.Delegate|()
+            public [ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] get(): R|@R|Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/Int>>| {
                 ^ D|/propertyToResolve|.R|/Delegate.getValue|(Null(null), ::R|/propertyToResolve|)
             }
-            public [ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] set([ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] <set-?>: R|@R|Anno|(<strcat>(String(explicitType return type ), prop#))  kotlin/collections/List<@R|Anno|(<strcat>(String(explicitType nested return type ), prop#))  kotlin/collections/List<@R|Anno|(<strcat>(String(explicitType nested nested return type ), prop#))  kotlin/Int>>|): R|kotlin/Unit| {
+            public [ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] set([ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] <set-?>: R|@R|Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/Int>>|): R|kotlin/Unit| {
                 ^ D|/propertyToResolve|.R|/Delegate.setValue|(Null(null), ::R|/propertyToResolve|, R|<local>/propertyToResolve|)
             }
 
@@ -409,7 +409,7 @@ FILE: [ResolvedTo(IMPORTS)] propertyWithImplicitTypeScript.kts
                 ^getValue this@R|/Delegate|.R|/Delegate.explicitType|()
             }
 
-            public open override operator [ResolvedTo(CONTRACTS)] fun setValue([ResolvedTo(CONTRACTS)] thisRef: R|kotlin/Any?|, [ResolvedTo(CONTRACTS)] property: R|kotlin/reflect/KProperty<*>|, [ResolvedTo(CONTRACTS)] value: R|@R|Anno|(<strcat>(String(setValue type ref ), prop#))  kotlin/collections/List<@R|Anno|(<strcat>(String(setValue nested type ref ), prop#))  kotlin/collections/List<@R|Anno|(<strcat>(String(setValue nested nested type ref ), prop#))  kotlin/Int>>|): R|kotlin/Unit| {
+            public open override operator [ResolvedTo(CONTRACTS)] fun setValue([ResolvedTo(CONTRACTS)] thisRef: R|kotlin/Any?|, [ResolvedTo(CONTRACTS)] property: R|kotlin/reflect/KProperty<*>|, [ResolvedTo(CONTRACTS)] value: R|@R|Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/Int>>|): R|kotlin/Unit| {
             }
 
         }
@@ -455,7 +455,7 @@ FILE: [ResolvedTo(IMPORTS)] propertyWithImplicitTypeScript.kts
                 ^getValue this@R|/Delegate|.R|/Delegate.explicitType|()
             }
 
-            public open override operator [ResolvedTo(CONTRACTS)] fun setValue([ResolvedTo(CONTRACTS)] thisRef: R|kotlin/Any?|, [ResolvedTo(CONTRACTS)] property: R|kotlin/reflect/KProperty<*>|, [ResolvedTo(CONTRACTS)] value: R|@R|Anno|(<strcat>(String(setValue type ref ), prop#))  kotlin/collections/List<@R|Anno|(<strcat>(String(setValue nested type ref ), prop#))  kotlin/collections/List<@R|Anno|(<strcat>(String(setValue nested nested type ref ), prop#))  kotlin/Int>>|): R|kotlin/Unit| {
+            public open override operator [ResolvedTo(CONTRACTS)] fun setValue([ResolvedTo(CONTRACTS)] thisRef: R|kotlin/Any?|, [ResolvedTo(CONTRACTS)] property: R|kotlin/reflect/KProperty<*>|, [ResolvedTo(CONTRACTS)] value: R|@R|Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/Int>>|): R|kotlin/Unit| {
             }
 
         }
@@ -513,3 +513,4 @@ FILE: [ResolvedTo(BODY_RESOLVE)] propertyWithImplicitTypeScript.kts
             public [ResolvedTo(BODY_RESOLVE)] set([ResolvedTo(BODY_RESOLVE)] <set-?>: R|@R|Anno|(position = <strcat>(String(explicitType return type ), R|/prop|))  kotlin/collections/List<@R|Anno|(position = <strcat>(String(explicitType nested return type ), R|/prop|))  kotlin/collections/List<@R|Anno|(position = <strcat>(String(explicitType nested nested return type ), R|/prop|))  kotlin/Int>>|): R|kotlin/Unit| {
                 ^ D|/propertyToResolve|.R|/Delegate.setValue|(Null(null), ::R|/propertyToResolve|, R|<local>/propertyToResolve|)
             }
+

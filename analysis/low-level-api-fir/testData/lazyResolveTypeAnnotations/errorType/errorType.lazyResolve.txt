@@ -86,7 +86,7 @@ FILE: [ResolvedTo(IMPORTS)] errorType.kt
     }
     public? final? const [ResolvedTo(RAW_FIR)] val prop: <implicit> = LAZY_EXPRESSION
         public? [ResolvedTo(RAW_FIR)] get(): <implicit>
-    public? final? [ResolvedTo(TYPES)] fun function([ResolvedTo(TYPES)] param: @R|lowlevel/Anno|[Unresolved](prop#) <ERROR TYPE REF: Symbol not found for Type1>): @R|lowlevel/Anno|[Unresolved](prop#) <ERROR TYPE REF: Symbol not found for Type3> { LAZY_BLOCK }
+    public? final? [ResolvedTo(TYPES)] fun function([ResolvedTo(TYPES)] param: @R|lowlevel/Anno|[Unresolved](LAZY_EXPRESSION) <ERROR TYPE REF: Symbol not found for Type1>): @R|lowlevel/Anno|[Unresolved](LAZY_EXPRESSION) <ERROR TYPE REF: Symbol not found for Type3> { LAZY_BLOCK }
 
 STATUS:
 FILE: [ResolvedTo(IMPORTS)] errorType.kt
@@ -101,7 +101,7 @@ FILE: [ResolvedTo(IMPORTS)] errorType.kt
     }
     public? final? const [ResolvedTo(RAW_FIR)] val prop: <implicit> = LAZY_EXPRESSION
         public? [ResolvedTo(RAW_FIR)] get(): <implicit>
-    public final [ResolvedTo(STATUS)] fun function([ResolvedTo(STATUS)] param: @R|lowlevel/Anno|[Unresolved](prop#) <ERROR TYPE REF: Symbol not found for Type1>): @R|lowlevel/Anno|[Unresolved](prop#) <ERROR TYPE REF: Symbol not found for Type3> { LAZY_BLOCK }
+    public final [ResolvedTo(STATUS)] fun function([ResolvedTo(STATUS)] param: @R|lowlevel/Anno|[Unresolved](LAZY_EXPRESSION) <ERROR TYPE REF: Symbol not found for Type1>): @R|lowlevel/Anno|[Unresolved](LAZY_EXPRESSION) <ERROR TYPE REF: Symbol not found for Type3> { LAZY_BLOCK }
 
 EXPECT_ACTUAL_MATCHING:
 FILE: [ResolvedTo(IMPORTS)] errorType.kt
@@ -116,7 +116,7 @@ FILE: [ResolvedTo(IMPORTS)] errorType.kt
     }
     public? final? const [ResolvedTo(RAW_FIR)] val prop: <implicit> = LAZY_EXPRESSION
         public? [ResolvedTo(RAW_FIR)] get(): <implicit>
-    public final [ResolvedTo(EXPECT_ACTUAL_MATCHING)] fun function([ResolvedTo(EXPECT_ACTUAL_MATCHING)] param: @R|lowlevel/Anno|[Unresolved](prop#) <ERROR TYPE REF: Symbol not found for Type1>): @R|lowlevel/Anno|[Unresolved](prop#) <ERROR TYPE REF: Symbol not found for Type3> { LAZY_BLOCK }
+    public final [ResolvedTo(EXPECT_ACTUAL_MATCHING)] fun function([ResolvedTo(EXPECT_ACTUAL_MATCHING)] param: @R|lowlevel/Anno|[Unresolved](LAZY_EXPRESSION) <ERROR TYPE REF: Symbol not found for Type1>): @R|lowlevel/Anno|[Unresolved](LAZY_EXPRESSION) <ERROR TYPE REF: Symbol not found for Type3> { LAZY_BLOCK }
 
 CONTRACTS:
 FILE: [ResolvedTo(IMPORTS)] errorType.kt
@@ -131,7 +131,7 @@ FILE: [ResolvedTo(IMPORTS)] errorType.kt
     }
     public? final? const [ResolvedTo(RAW_FIR)] val prop: <implicit> = LAZY_EXPRESSION
         public? [ResolvedTo(RAW_FIR)] get(): <implicit>
-    public final [ResolvedTo(CONTRACTS)] fun function([ResolvedTo(CONTRACTS)] param: @R|lowlevel/Anno|[Unresolved](prop#) <ERROR TYPE REF: Symbol not found for Type1>): @R|lowlevel/Anno|[Unresolved](prop#) <ERROR TYPE REF: Symbol not found for Type3> {
+    public final [ResolvedTo(CONTRACTS)] fun function([ResolvedTo(CONTRACTS)] param: @R|lowlevel/Anno|[Unresolved](LAZY_EXPRESSION) <ERROR TYPE REF: Symbol not found for Type1>): @R|lowlevel/Anno|[Unresolved](LAZY_EXPRESSION) <ERROR TYPE REF: Symbol not found for Type3> {
     }
 
 IMPLICIT_TYPES_BODY_RESOLVE:
@@ -147,7 +147,7 @@ FILE: [ResolvedTo(IMPORTS)] errorType.kt
     }
     public? final? const [ResolvedTo(RAW_FIR)] val prop: <implicit> = LAZY_EXPRESSION
         public? [ResolvedTo(RAW_FIR)] get(): <implicit>
-    public final [ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] fun function([ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] param: @R|lowlevel/Anno|[Unresolved](prop#) <ERROR TYPE REF: Symbol not found for Type1>): @R|lowlevel/Anno|[Unresolved](prop#) <ERROR TYPE REF: Symbol not found for Type3> {
+    public final [ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] fun function([ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] param: @R|lowlevel/Anno|[Unresolved](LAZY_EXPRESSION) <ERROR TYPE REF: Symbol not found for Type1>): @R|lowlevel/Anno|[Unresolved](LAZY_EXPRESSION) <ERROR TYPE REF: Symbol not found for Type3> {
     }
 
 ANNOTATION_ARGUMENTS:
