@@ -10233,6 +10233,12 @@ public class IrBoxJsES6TestGenerated extends AbstractIrBoxJsES6Test {
         }
 
         @Test
+        @TestMetadata("kClassLambda.kt")
+        public void testKClassLambda() throws Exception {
+            runTest("js/js.translator/testData/box/reflection/kClassLambda.kt");
+        }
+
+        @Test
         @TestMetadata("kClassOnReifiedType.kt")
         public void testKClassOnReifiedType() throws Exception {
             runTest("js/js.translator/testData/box/reflection/kClassOnReifiedType.kt");
@@ -10260,6 +10266,12 @@ public class IrBoxJsES6TestGenerated extends AbstractIrBoxJsES6Test {
         @TestMetadata("kClassSimpleName.kt")
         public void testKClassSimpleName() throws Exception {
             runTest("js/js.translator/testData/box/reflection/kClassSimpleName.kt");
+        }
+
+        @Test
+        @TestMetadata("kClassSuspendFunction.kt")
+        public void testKClassSuspendFunction() throws Exception {
+            runTest("js/js.translator/testData/box/reflection/kClassSuspendFunction.kt");
         }
 
         @Test

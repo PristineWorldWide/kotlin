@@ -164,7 +164,13 @@ internal class JsUsefulDeclarationProcessor(
             else -> context.intrinsics.metadataClassConstructorSymbol.owner.enqueue(irClass, "class metadata")
         }
 
-        context.intrinsics.setMetadataForSymbol.owner.enqueue(irClass, "metadata")
+        val x = listOf(1, 2, 3)
+        x.sortedByDescending { it }
+        context.intrinsics.setMetadataForSymbol.owner.enqueue(irClass, "metadata for all")
+        context.intrinsics.setMetadataForLambdaSymbol.owner.enqueue(irClass, "metadata for lambda")
+        context.intrinsics.setMetadataForFunctionReferenceSymbol.owner.enqueue(irClass, "metadata for function reference")
+        context.intrinsics.setMetadataForCoroutineSymbol.owner.enqueue(irClass, "metadata for coroutine")
+        context.intrinsics.setMetadataForCompanionSymbol.owner.enqueue(irClass, "metadata for companion")
 
         if (irClass.containsInterfaceDefaultImplementation()) {
             context.intrinsics.jsPrototypeOfSymbol.owner.enqueue(irClass, "interface default implementation")

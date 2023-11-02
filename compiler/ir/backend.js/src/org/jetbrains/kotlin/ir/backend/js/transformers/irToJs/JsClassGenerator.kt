@@ -12,6 +12,9 @@ import org.jetbrains.kotlin.ir.backend.js.JsIrBackendContext
 import org.jetbrains.kotlin.ir.backend.js.export.isAllowedFakeOverriddenDeclaration
 import org.jetbrains.kotlin.ir.backend.js.export.isExported
 import org.jetbrains.kotlin.ir.backend.js.export.isOverriddenExported
+import org.jetbrains.kotlin.ir.backend.js.lower.CallableReferenceLowering
+import org.jetbrains.kotlin.ir.backend.js.lower.coroutines.AbstractSuspendFunctionsLowering
+import org.jetbrains.kotlin.ir.backend.js.lower.coroutines.JsSuspendFunctionsLowering
 import org.jetbrains.kotlin.ir.backend.js.lower.isEs6ConstructorReplacement
 import org.jetbrains.kotlin.ir.backend.js.utils.*
 import org.jetbrains.kotlin.ir.declarations.*
@@ -161,7 +164,7 @@ class JsClassGenerator(private val irClass: IrClass, val context: JsGenerationCo
 
                 fun IrSimpleFunction.propertyAccessorForwarder(
                     description: String,
-                    callActualAccessor: (JsNameRef) -> JsStatement
+                    callActualAccessor: (JsNameRef) -> JsStatement,
                 ): JsFunction? =
                     when (visibility) {
                         DescriptorVisibilities.PRIVATE -> null
@@ -255,7 +258,7 @@ class JsClassGenerator(private val irClass: IrClass, val context: JsGenerationCo
 
         val metadataPlace = if (es6mode) classModel.postDeclarationBlock else classModel.preDeclarationBlock
 
-        metadataPlace.statements += generateSetMetadataCall()
+        metadataPlace.statements += generateSetMetadataForCall()
         context.staticContext.classModels[irClass.symbol] = classModel
 
         return classBlock
@@ -371,38 +374,64 @@ class JsClassGenerator(private val irClass: IrClass, val context: JsGenerationCo
         }
     }
 
-    private fun generateSetMetadataCall(): JsStatement {
-        val setMetadataFor = backendContext.intrinsics.setMetadataForSymbol.owner
+    private fun IrSimpleFunction.invokeSetMetadata(vararg arguments: JsExpression?): JsStatement {
+        return JsInvocation(
+            JsNameRef(context.getNameForStaticFunction(this)),
+            arguments.dropLastWhile { it == null }.memoryOptimizedMap { it ?: jsUndefined }
+        ).makeStmt()
+    }
 
+    private fun pickSpecificSetMetadata(): IrSimpleFunction? {
+        if (irClass.isCompanion) {
+            return backendContext.intrinsics.setMetadataForCompanionSymbol.owner
+        }
+        if (irClass.isClass) {
+            when (irClass.origin) {
+                is CallableReferenceLowering.Companion.LAMBDA_IMPL -> {
+                    return backendContext.intrinsics.setMetadataForLambdaSymbol.owner
+                }
+                is CallableReferenceLowering.Companion.FUNCTION_REFERENCE_IMPL -> {
+                    return backendContext.intrinsics.setMetadataForFunctionReferenceSymbol.owner
+                }
+                is AbstractSuspendFunctionsLowering.DECLARATION_ORIGIN_COROUTINE_IMPL -> {
+                    return backendContext.intrinsics.setMetadataForCoroutineSymbol.owner
+                }
+            }
+        }
+        return null
+    }
+
+    private fun generateSetMetadataForCall(): JsStatement {
         val ctor = classNameRef
         val parent = baseClassRef?.takeIf { !es6mode }
-        val name = generateSimpleName()
         val interfaces = generateInterfacesList()
-        val metadataConstructor = getMetadataConstructor()
         val defaultConstructor = runIf(irClass.isClass, ::findDefaultConstructor)
         val associatedObjectKey = generateAssociatedObjectKey()
         val associatedObjects = generateAssociatedObjects()
         val suspendArity = generateSuspendArity()
 
-        return JsInvocation(
-            JsNameRef(context.getNameForStaticFunction(setMetadataFor)),
-            listOf(
-                ctor,
-                name,
-                metadataConstructor,
-                parent,
-                interfaces,
-                defaultConstructor,
-                associatedObjectKey,
-                associatedObjects,
-                suspendArity
-            )
-                .dropLastWhile { it == null }
-                .memoryOptimizedMap { it ?: jsUndefined }
-        ).makeStmt()
+        if (defaultConstructor == null && associatedObjectKey == null && associatedObjects == null) {
+            val setSpecificMetadata = pickSpecificSetMetadata()
+            if (setSpecificMetadata != null) {
+                return setSpecificMetadata.invokeSetMetadata(ctor, parent, interfaces, suspendArity)
+            }
+        }
 
+        val name = generateSimpleName()
+        val metadataCtor = getMetadataConstructor()
+        val setMetadataFor = backendContext.intrinsics.setMetadataForSymbol.owner
+        return setMetadataFor.invokeSetMetadata(
+            classNameRef,
+            name,
+            metadataCtor,
+            parent,
+            interfaces,
+            defaultConstructor,
+            associatedObjectKey,
+            associatedObjects,
+            suspendArity
+        )
     }
-
 
     private fun IrType.asConstructorRef(): JsExpression? {
         val ownerSymbol = classOrNull?.takeIf {

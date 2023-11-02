@@ -10127,6 +10127,12 @@ public class FirJsBoxTestGenerated extends AbstractFirJsBoxTest {
         }
 
         @Test
+        @TestMetadata("kClassLambda.kt")
+        public void testKClassLambda() throws Exception {
+            runTest("js/js.translator/testData/box/reflection/kClassLambda.kt");
+        }
+
+        @Test
         @TestMetadata("kClassOnReifiedType.kt")
         public void testKClassOnReifiedType() throws Exception {
             runTest("js/js.translator/testData/box/reflection/kClassOnReifiedType.kt");
@@ -10154,6 +10160,12 @@ public class FirJsBoxTestGenerated extends AbstractFirJsBoxTest {
         @TestMetadata("kClassSimpleName.kt")
         public void testKClassSimpleName() throws Exception {
             runTest("js/js.translator/testData/box/reflection/kClassSimpleName.kt");
+        }
+
+        @Test
+        @TestMetadata("kClassSuspendFunction.kt")
+        public void testKClassSuspendFunction() throws Exception {
+            runTest("js/js.translator/testData/box/reflection/kClassSuspendFunction.kt");
         }
 
         @Test
