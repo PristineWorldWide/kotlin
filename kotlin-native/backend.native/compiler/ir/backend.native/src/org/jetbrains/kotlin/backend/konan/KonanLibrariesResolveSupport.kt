@@ -29,7 +29,7 @@ class KonanLibrariesResolveSupport(
     private val libraryToCacheFile =
                     configuration.get(KonanConfigKeys.LIBRARY_TO_ADD_TO_CACHE)?.let { File(it) }
 
-    private val libraryNames = configuration.getList(KonanConfigKeys.LIBRARY_FILES)
+    private val libraryNames = configuration.getList(KonanConfigKeys.LIBRARY_FILES) + listOfNotNull(libraryToCacheFile?.absolutePath)
 
     private val unresolvedLibraries = libraryNames.toUnresolvedLibraries
 
@@ -59,7 +59,7 @@ class KonanLibrariesResolveSupport(
     // But currently the resolver is in the middle of a complex refactoring so it was decided to avoid changes in its logic.
     // TODO: Handle included libraries in KonanLibraryResolver when it's refactored and moved into the big Kotlin repo.
     internal val resolvedLibraries = run {
-        val additionalLibraryFiles = (includedLibraryFiles + listOfNotNull(libraryToCacheFile)).toSet()
+        val additionalLibraryFiles = includedLibraryFiles.toSet()
         resolver.resolveWithDependencies(
                 unresolvedLibraries + additionalLibraryFiles.map { UnresolvedLibrary(it.absolutePath, null) },
                 noStdLib = configuration.getBoolean(KonanConfigKeys.NOSTDLIB),
