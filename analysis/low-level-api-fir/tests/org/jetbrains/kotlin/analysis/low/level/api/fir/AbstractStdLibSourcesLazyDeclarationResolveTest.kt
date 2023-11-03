@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.test.directives.model.singleValue
 import org.jetbrains.kotlin.test.services.TestModuleStructure
 import org.jetbrains.kotlin.test.services.TestServices
 
-abstract class AbstractStdLibSourcesLazyDeclarationResolveTest : AbstractFirLazyDeclarationResolveTestCase() {
+abstract class AbstractStdLibSourcesLazyDeclarationResolveTest : AbstractFirLazyDeclarationResolveOverAllPhasesTest() {
     override fun checkSession(firSession: LLFirResolveSession) {
         requireIsInstance<KtLibrarySourceModule>(firSession.useSiteKtModule)
     }
