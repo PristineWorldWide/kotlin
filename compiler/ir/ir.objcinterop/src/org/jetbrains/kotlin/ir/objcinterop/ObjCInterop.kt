@@ -11,7 +11,11 @@ import org.jetbrains.kotlin.ir.ObsoleteDescriptorBasedAPI
 import org.jetbrains.kotlin.ir.declarations.*
 import org.jetbrains.kotlin.ir.descriptors.IrBasedClassConstructorDescriptor
 import org.jetbrains.kotlin.ir.expressions.IrConstructorCall
+import org.jetbrains.kotlin.ir.symbols.IrClassSymbol
+import org.jetbrains.kotlin.ir.symbols.IrTypeParameterSymbol
+import org.jetbrains.kotlin.ir.types.IrType
 import org.jetbrains.kotlin.ir.types.classOrNull
+import org.jetbrains.kotlin.ir.types.classifierOrFail
 import org.jetbrains.kotlin.ir.util.*
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.NativeForwardDeclarationKind
@@ -53,6 +57,26 @@ private fun IrClass.selfOrAnySuperClass(pred: (IrClass) -> Boolean): Boolean {
 
 fun IrClass.isObjCClass() = this.packageFqName != interopPackageName &&
         selfOrAnySuperClass { it.hasEqualFqName(objCObjectFqName) }
+
+fun IrType.isObjCObjectType(): Boolean {
+    val superClasses = mutableSetOf<IrClass>()
+    val seenTypeParameters = mutableSetOf<IrTypeParameterSymbol>()
+
+    fun traverse(type: IrType) {
+        when (val classifier = type.classifierOrFail) {
+            is IrClassSymbol ->
+                superClasses.addAll(classifier.owner.getAllSuperclasses())
+            is IrTypeParameterSymbol -> {
+                if (seenTypeParameters.add(classifier))
+                    classifier.owner.superTypes.forEach { traverse(it) }
+            }
+            else -> error(classifier)
+        }
+    }
+
+    traverse(this)
+    return superClasses.any { it.hasEqualFqName(objCObjectFqName) }
+}
 
 fun ClassDescriptor.isExternalObjCClass(): Boolean = this.isObjCClass() &&
         this.parentsWithSelf.filterIsInstance<ClassDescriptor>().any {
