@@ -52,19 +52,21 @@ class GradleErrorMessageCollector(
         return errors.isNotEmpty()
     }
 
-    fun flush(file: File) {
+    fun flush(files: Set<File>) {
         if (!hasErrors()) {
             return
         }
-        file.createNewFile()
-        FileWriter(file).use {
-            kotlinPluginVersion?.also { version -> it.append("kotlin version: $version\n") }
-            for (error in errors) {
-                it.append("error message: $error\n\n")
+        files.forEach { file ->
+            file.createNewFile()
+            FileWriter(file).use {
+                kotlinPluginVersion?.also { version -> it.append("kotlin version: $version\n") }
+                for (error in errors) {
+                    it.append("error message: $error\n\n")
+                }
+                it.flush()
             }
-            it.flush()
+            logger.debug("${errors.count()} errors were stored into file ${file.absolutePath}")
         }
-        logger.debug("${errors.count()} errors were stored into file ${file.absolutePath}")
         clear()
     }
 }
