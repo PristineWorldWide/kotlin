@@ -18,7 +18,7 @@ import a.A.<!CONFLICTING_IMPORT!>B<!>
 import a.D.<!CONFLICTING_IMPORT!>B<!>
 
 fun test(b: <!UNRESOLVED_REFERENCE!>B<!>) {
-    <!UNRESOLVED_REFERENCE!>B<!>()
+    <!OVERLOAD_RESOLUTION_AMBIGUITY!>B<!>()
 }
 
 // FILE: d.kt
@@ -27,5 +27,5 @@ import a.D.*
 
 // todo ambiguvity here
 fun test2(b: <!UNRESOLVED_REFERENCE!>B<!>) {
-    <!UNRESOLVED_REFERENCE!>B<!>()
+    <!OVERLOAD_RESOLUTION_AMBIGUITY!>B<!>()
 }
