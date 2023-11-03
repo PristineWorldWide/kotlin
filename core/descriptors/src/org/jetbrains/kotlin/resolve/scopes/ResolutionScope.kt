@@ -24,30 +24,19 @@ interface ResolutionScope {
     /**
      * Returns only non-deprecated classifiers.
      *
-     * See [getContributedClassifierIncludeDeprecated] to get all classifiers.
+     * See [getContributedClassifiersIncludeDeprecated] to get all classifiers.
      */
-    fun getContributedClassifier(name: Name, location: LookupLocation): ClassifierDescriptor?
+    fun getContributedClassifiers(name: Name, location: LookupLocation): List<ClassifierDescriptor>
+
+    /**
+     * Helper for [getContributedClassifiers] that returns null in case
+     * of ambiguity. Use this function when it's already handled somewhere else.
+     */
+    fun getContributedClassifier(name: Name, location: LookupLocation): ClassifierDescriptor? =
+        getContributedClassifiers(name, location).singleOrNull()
 
     /**
      * Returns contributed classifier, but discriminates deprecated
-     *
-     * This method can return some classifier where [getContributedClassifier] haven't returned any,
-     * but it should never return different one, even if it is deprecated.
-     * Note that implementors are encouraged to provide non-deprecated classifier if it doesn't contradict
-     * contract above.
-     */
-    fun getContributedClassifierIncludeDeprecated(name: Name, location: LookupLocation): DescriptorWithDeprecation<ClassifierDescriptor>? =
-        getContributedClassifier(name, location)?.let { DescriptorWithDeprecation.createNonDeprecated(it) }
-
-    /**
-     * Returns a list of non-deprecated classifiers.
-     */
-    fun getContributedClassifiers(name: Name, location: LookupLocation): List<ClassifierDescriptor> {
-        return getContributedClassifier(name, location)?.let { listOf(it) }.orEmpty()
-    }
-
-    /**
-     * Returns contributed classifiers, but discriminates deprecated
      *
      * This method can return some classifier where [getContributedClassifiers] haven't returned any,
      * but it should never return different one, even if it is deprecated.
@@ -56,6 +45,13 @@ interface ResolutionScope {
      */
     fun getContributedClassifiersIncludeDeprecated(name: Name, location: LookupLocation): List<DescriptorWithDeprecation<ClassifierDescriptor>> =
         getContributedClassifiers(name, location).map { DescriptorWithDeprecation.createNonDeprecated(it) }
+
+    /**
+     * Helper for [getContributedClassifiersIncludeDeprecated] that returns null in case
+     * of ambiguity. Use this function when it's already handled somewhere else.
+     */
+    fun getContributedClassifierIncludeDeprecated(name: Name, location: LookupLocation): DescriptorWithDeprecation<ClassifierDescriptor>? =
+        getContributedClassifiersIncludeDeprecated(name, location).singleOrNull()
 
     fun getContributedVariables(name: Name, location: LookupLocation): Collection<@JvmWildcard VariableDescriptor>
 

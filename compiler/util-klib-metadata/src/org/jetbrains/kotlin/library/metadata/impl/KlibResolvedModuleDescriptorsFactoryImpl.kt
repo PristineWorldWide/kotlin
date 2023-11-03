@@ -239,7 +239,8 @@ class ForwardDeclarationsPackageFragmentDescriptor(
             }
         }
 
-        override fun getContributedClassifier(name: Name, location: LookupLocation) = declarations(name)
+        override fun getContributedClassifiers(name: Name, location: LookupLocation): List<ClassifierDescriptor> =
+            listOf(declarations(name))
 
         override fun printScopeStructure(p: Printer) {
             p.println(this::class.java.simpleName, "{}")

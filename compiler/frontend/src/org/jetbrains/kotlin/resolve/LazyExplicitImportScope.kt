@@ -27,7 +27,6 @@ import org.jetbrains.kotlin.resolve.scopes.DescriptorKindFilter
 import org.jetbrains.kotlin.resolve.scopes.MemberScope
 import org.jetbrains.kotlin.utils.CallOnceFunction
 import org.jetbrains.kotlin.utils.Printer
-import org.jetbrains.kotlin.utils.addIfNotNull
 
 class LazyExplicitImportScope(
     private val languageVersionSettings: LanguageVersionSettings,
@@ -38,12 +37,12 @@ class LazyExplicitImportScope(
     private val storeReferences: CallOnceFunction<Collection<DeclarationDescriptor>, Unit>
 ) : BaseImportingScope(null) {
 
-    override fun getContributedClassifier(name: Name, location: LookupLocation): ClassifierDescriptor? {
-        if (name != aliasName) return null
+    override fun getContributedClassifiers(name: Name, location: LookupLocation): List<ClassifierDescriptor> {
+        if (name != aliasName) return emptyList()
 
         return when (packageOrClassDescriptor) {
-            is PackageViewDescriptor -> packageOrClassDescriptor.memberScope.getContributedClassifier(declaredName, location)
-            is ClassDescriptor -> packageOrClassDescriptor.unsubstitutedInnerClassesScope.getContributedClassifier(declaredName, location)
+            is PackageViewDescriptor -> packageOrClassDescriptor.memberScope.getContributedClassifiers(declaredName, location)
+            is ClassDescriptor -> packageOrClassDescriptor.unsubstitutedInnerClassesScope.getContributedClassifiers(declaredName, location)
             else -> throw IllegalStateException("Should be class or package: $packageOrClassDescriptor")
         }
     }
@@ -68,7 +67,7 @@ class LazyExplicitImportScope(
         val descriptors = SmartList<DeclarationDescriptor>()
 
         if (kindFilter.acceptsKinds(DescriptorKindFilter.CLASSIFIERS_MASK)) {
-            descriptors.addIfNotNull(getContributedClassifier(aliasName, NoLookupLocation.WHEN_GET_ALL_DESCRIPTORS))
+            descriptors.addAll(getContributedClassifiers(aliasName, NoLookupLocation.WHEN_GET_ALL_DESCRIPTORS))
         }
         if (kindFilter.acceptsKinds(DescriptorKindFilter.FUNCTIONS_MASK)) {
             descriptors.addAll(getContributedFunctions(aliasName, NoLookupLocation.WHEN_GET_ALL_DESCRIPTORS))

@@ -368,10 +368,10 @@ class DeserializedClassDescriptor(
             }
         }
 
-        override fun getContributedClassifier(name: Name, location: LookupLocation): ClassifierDescriptor? {
+        override fun getContributedClassifiers(name: Name, location: LookupLocation): List<ClassifierDescriptor> {
             recordLookup(name, location)
-            classDescriptor.enumEntries?.findEnumEntry(name)?.let { return it }
-            return super.getContributedClassifier(name, location)
+            classDescriptor.enumEntries?.findEnumEntry(name)?.let { return listOf(it) }
+            return super.getContributedClassifiers(name, location)
         }
 
         override fun createClassId(name: Name) = classId.createNestedClassId(name)

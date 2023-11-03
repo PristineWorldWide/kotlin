@@ -387,12 +387,12 @@ open class LazyClassMemberScope(
     }
 
     private fun addSyntheticNestedClasses(result: MutableCollection<DeclarationDescriptor>, location: LookupLocation) {
-        result.addAll(c.syntheticResolveExtension.getSyntheticNestedClassNames(thisDescriptor).mapNotNull {
-            getContributedClassifier(
+        result.addAll(c.syntheticResolveExtension.getSyntheticNestedClassNames(thisDescriptor).flatMap {
+            getContributedClassifiers(
                 it,
                 location
             )
-        }.toList())
+        })
     }
 
     private fun generateSyntheticCompanionObject(name: Name, result: MutableSet<ClassDescriptor>) {
