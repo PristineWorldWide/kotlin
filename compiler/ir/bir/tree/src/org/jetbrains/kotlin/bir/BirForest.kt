@@ -27,16 +27,6 @@ class BirForest : BirElementParent() {
     private val movedElementBuffer = arrayOfNulls<BirElementBase>(64)
     private var movedElementBufferSize = 0
 
-    data class Stats(
-        var attachElement: Int = 0,
-        var detachElement: Int = 0,
-        var classifyElement: Int = 0,
-    ) {
-        fun present() = toString().substringAfter('(').removeSuffix(")")
-    }
-
-    var stats = Stats()
-
     internal fun elementAttached(element: BirElementBase) {
         element.acceptLite {
             when (it.root) {
@@ -53,7 +43,6 @@ class BirForest : BirElementParent() {
     }
 
     private fun attachElement(element: BirElementBase) {
-        stats.attachElement++
         element.root = this
         addElementToIndex(element)
     }
@@ -84,7 +73,6 @@ class BirForest : BirElementParent() {
     }
 
     private fun detachElement(element: BirElementBase) {
-        stats.detachElement++
         element.root = null
         removeElementFromIndex(element)
     }
@@ -173,7 +161,6 @@ class BirForest : BirElementParent() {
 
         val backReferenceRecorder = BackReferenceRecorder()
 
-        stats.classifyElement++
         assert(mutableElementCurrentlyBeingClassified == null)
         if (element is BirImplElementBase) {
             mutableElementCurrentlyBeingClassified = element

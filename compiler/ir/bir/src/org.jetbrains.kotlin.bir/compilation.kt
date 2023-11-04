@@ -34,19 +34,19 @@ private val birPhases = listOf<(JvmBirBackendContext) -> BirLoweringPhase>(
     ::BirProvisionalFunctionExpressionLowering,
     ::BirJvmOverloadsAnnotationLowering,
     ::BirMainMethodGenerationLowering,
-    //::BirAnnotationLowering,
     ::BirPolymorphicSignatureLowering,
     ::BirVarargLowering,
     ::BirJvmLateinitLowering,
     ::BirJvmInventNamesForLocalClassesLowering,
     ::BirInlineCallableReferenceToLambdaLowering,
+    ::BirAnnotationLowering,
 )
 
 private val excludedStandardPhases = setOf<String>(
     // This phase removes annotation constructors, but they are still being used,
     // which causes an exception in BIR. It works in IR because removed constructors
     // still have their parent property set.
-    "Annotation",
+    //"Annotation",
     // This phase is not implemented, as it is hardly ever relevant.
     "AnnotationImplementation",
 )
@@ -111,10 +111,10 @@ private fun reconstructPhases(
                 .map { it.second as AbstractNamedCompilerPhase<JvmBackendContext, IrFile, IrFile> }
                 .toMutableList()
 
-            filePhases.add(
+            /*filePhases.add(
                 filePhases.indexOfFirst { (it as AnyNamedPhase).name == "DirectInvokes" } + 1,
                 terminateProcessPhase as AbstractNamedCompilerPhase<JvmBackendContext, IrFile, IrFile>
-            )
+            )*/
 
             val lower = CustomPerFileAggregateLoweringPhase(filePhases, profile)
             listOf(NamedCompilerPhase(topPhase.name, topPhase.description, lower = lower))
@@ -288,19 +288,11 @@ private object BirLowering : SameTypeCompilerPhase<JvmBackendContext, BirCompila
         }
         //exitProcess(0)
 
-        println("Compiled BIR stats after conversion: ${compiledBir.stats.present()}")
-        compiledBir.stats = BirForest.Stats()
-
         for (phase in input.backendContext.loweringPhases) {
             invokePhaseMeasuringTime(profile, "!BIR - ${phase.javaClass.simpleName}") {
                 phase(input.birModule)
             }
-
-            println("Compiled BIR stats after phase: ${compiledBir.stats.present()}")
-            compiledBir.stats = BirForest.Stats()
         }
-
-        //println("Compiled BIR stats after lowering: ${compiledBir.stats.present()}")
 
         return input
     }
