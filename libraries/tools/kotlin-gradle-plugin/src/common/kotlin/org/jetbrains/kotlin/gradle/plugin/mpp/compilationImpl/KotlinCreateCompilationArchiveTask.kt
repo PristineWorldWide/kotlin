@@ -112,12 +112,6 @@ private class KotlinCompilationArchiveTasksImpl(
     }
 }
 
-private val KotlinCompilation<*>.archiveArtifactExtension: String
-    get() = when {
-        this is AbstractKotlinNativeCompilation -> "klib"
-        else -> "jar"
-    }
-
 internal val KotlinCreateCompilationArchivesTask = KotlinCompilationSideEffect { compilation ->
     if (compilation.isMain() || compilation.isTest()) return@KotlinCompilationSideEffect
     if (compilation.target is KotlinMetadataTarget) return@KotlinCompilationSideEffect
