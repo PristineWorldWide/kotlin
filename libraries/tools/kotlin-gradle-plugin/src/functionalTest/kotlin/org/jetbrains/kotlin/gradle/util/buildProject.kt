@@ -74,8 +74,6 @@ fun Project.kotlin(code: KotlinMultiplatformExtension.() -> Unit) {
     kotlin.code()
 }
 
-val Project.kotlin get() = project.kotlinExtension as KotlinMultiplatformExtension
-
 fun Project.kotlinArtifacts(code: KotlinArtifactsExtensionImpl.() -> Unit) {
     val kotlinArtifacts = project.kotlinArtifactsExtension as KotlinArtifactsExtensionImpl
     kotlinArtifacts.code()

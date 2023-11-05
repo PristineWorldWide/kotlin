@@ -8,6 +8,7 @@
 package org.jetbrains.kotlin.gradle.unitTests
 
 import org.gradle.api.Project
+import org.jetbrains.kotlin.gradle.dsl.multiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.PropertiesProvider.PropertyNames.KOTLIN_CREATE_ARCHIVE_TASKS_FOR_CUSTOM_COMPILATIONS
 import org.jetbrains.kotlin.gradle.plugin.mpp.compilationImpl.KotlinCompilationArchiveTasks
 import org.jetbrains.kotlin.gradle.plugin.mpp.internal
@@ -66,7 +67,7 @@ class KotlinCompilationArchiveTasksTest {
 
     @Test
     fun `main and test compilations should not have archive task`() {
-        testProject.kotlin.targets.flatMap { it.compilations }.forEach { compilation ->
+        testProject.multiplatformExtension.targets.flatMap { it.compilations }.forEach { compilation ->
             if (compilation.internal.archiveTaskName != null)
                 fail("Archive tasks should not be created for default compilations, but $compilation has it")
         }
