@@ -37,7 +37,7 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinCompilerArgumentsProducer.Create
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilerArgumentsProducer.CreateCompilerArgumentsContext.Companion.create
 import org.jetbrains.kotlin.gradle.plugin.cocoapods.asValidFrameworkName
 import org.jetbrains.kotlin.gradle.plugin.mpp.*
-import org.jetbrains.kotlin.gradle.plugin.statistics.UsesBuildFlowService
+import org.jetbrains.kotlin.gradle.plugin.statistics.UsesBuildFusService
 import org.jetbrains.kotlin.gradle.report.*
 import org.jetbrains.kotlin.gradle.report.UsesBuildMetricsService
 import org.jetbrains.kotlin.gradle.targets.native.KonanPropertiesBuildService
@@ -316,7 +316,7 @@ internal constructor(
     K2MultiplatformCompilationTask,
     UsesBuildMetricsService,
     KotlinCompilationTask<KotlinNativeCompilerOptions>,
-    UsesBuildFlowService {
+    UsesBuildFusService {
 
     @get:Input
     override val outputKind = LIBRARY

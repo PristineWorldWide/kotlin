@@ -35,7 +35,7 @@ import org.jetbrains.kotlin.statistics.metrics.StringMetrics
 import java.io.Serializable
 
 
-internal interface UsesBuildFlowService : Task {
+internal interface UsesBuildFusService : Task {
     @get:Internal
     val buildFusService: Property<BuildFusService?>
 }
@@ -82,8 +82,8 @@ internal abstract class BuildFusService : BuildService<BuildFusService.Parameter
         }
 
         fun registerIfAbsent(project: Project, pluginVersion: String) = registerIfAbsentImpl(project, pluginVersion).also { serviceProvider ->
-            SingleActionPerProject.run(project, UsesBuildMetricsService::class.java.name) {
-                project.tasks.withType<UsesBuildFlowService>().configureEach { task ->
+            SingleActionPerProject.run(project, UsesBuildFusService::class.java.name) {
+                project.tasks.withType<UsesBuildFusService>().configureEach { task ->
                     task.buildFusService.value(serviceProvider).disallowChanges()
                     task.usesService(serviceProvider)
                 }

@@ -45,6 +45,7 @@ import org.jetbrains.kotlin.gradle.plugin.internal.isConfigurationCacheRequested
 import org.jetbrains.kotlin.gradle.plugin.statistics.BuildFusService
 import org.jetbrains.kotlin.statistics.metrics.IStatisticsValuesConsumer
 import org.jetbrains.kotlin.statistics.metrics.StringMetrics
+import java.io.Serializable
 import java.lang.management.ManagementFactory
 import kotlin.reflect.KProperty0
 
@@ -235,7 +236,6 @@ abstract class BuildMetricsService : BuildService<BuildMetricsService.Parameters
                 it.parameters.fusMetricsConsumer.set(buildFusService.map { it.getFusMetricsConsumer() ?: DummyStatisticsValuesConsumer() })
             }.also {
                 subscribeForTaskEvents(project, it)
-                project.gradle.sharedServices.registrations.findByName(BuildFusService.serviceName) as BuildFusService?
             }
 
         }
@@ -366,7 +366,7 @@ private class TransformRecord(
     override val icLogLines: List<String> = emptyList()
 }
 
-internal class DummyStatisticsValuesConsumer : IStatisticsValuesConsumer {
+internal class DummyStatisticsValuesConsumer : IStatisticsValuesConsumer, Serializable {
     override fun report(metric: BooleanMetrics, value: Boolean, subprojectName: String?, weight: Long?): Boolean {
         //do nothing
         return true

@@ -10,14 +10,14 @@ import org.gradle.api.tasks.*
 import org.gradle.internal.hash.FileHasher
 import org.gradle.work.DisableCachingByDefault
 import org.jetbrains.kotlin.gradle.logging.kotlinInfo
-import org.jetbrains.kotlin.gradle.plugin.statistics.UsesBuildFlowService
+import org.jetbrains.kotlin.gradle.plugin.statistics.UsesBuildFusService
 import org.jetbrains.kotlin.statistics.metrics.NumericalMetrics
 import java.io.File
 import java.net.URI
 import javax.inject.Inject
 
 @DisableCachingByDefault
-abstract class AbstractSetupTask<Env : AbstractEnv, Settings : AbstractSettings<Env>> : DefaultTask(), UsesBuildFlowService {
+abstract class AbstractSetupTask<Env : AbstractEnv, Settings : AbstractSettings<Env>> : DefaultTask(), UsesBuildFusService {
     @get:Internal
     protected abstract val settings: Settings
 
