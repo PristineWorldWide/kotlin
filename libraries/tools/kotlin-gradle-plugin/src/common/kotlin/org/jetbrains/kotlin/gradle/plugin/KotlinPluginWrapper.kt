@@ -82,7 +82,7 @@ abstract class DefaultKotlinBasePlugin : KotlinBasePlugin {
             kotlinGradleBuildServices.detectKotlinPluginLoadedInMultipleProjects(project, pluginVersion)
         }
 
-        BuildMetricsService.registerIfAbsent(project)
+        BuildMetricsService.registerIfAbsent(project, buildFusService)
     }
 
     private fun addKotlinCompilerConfiguration(project: Project) {

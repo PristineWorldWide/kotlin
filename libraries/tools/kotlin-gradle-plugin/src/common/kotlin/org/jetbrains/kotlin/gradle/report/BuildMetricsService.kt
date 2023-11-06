@@ -47,7 +47,6 @@ import org.jetbrains.kotlin.statistics.metrics.IStatisticsValuesConsumer
 import org.jetbrains.kotlin.statistics.metrics.StringMetrics
 import java.io.Serializable
 import java.lang.management.ManagementFactory
-import kotlin.reflect.KProperty0
 
 internal interface UsesBuildMetricsService : Task {
     @get:Internal
@@ -67,12 +66,11 @@ abstract class BuildMetricsService : BuildService<BuildMetricsService.Parameters
         val projectName: Property<String>
         val kotlinVersion: Property<String>
         val buildConfigurationTags: ListProperty<StatTag>
-
-        val fusMetricsConsumer: Property<IStatisticsValuesConsumer?>
     }
 
     private val log = Logging.getLogger(this.javaClass)
     private val buildReportService = BuildReportsService()
+    private lateinit var fusService: Provider<BuildFusService>
 
     // Tasks and transforms' records
     private val buildOperationRecords = ConcurrentLinkedQueue<BuildOperationRecord>()
@@ -120,7 +118,7 @@ abstract class BuildMetricsService : BuildService<BuildMetricsService.Parameters
         taskExecutionResult?.buildMetrics?.also {
             buildMetrics.addAll(it)
 
-           parameters.fusMetricsConsumer.orNull?.also { collector ->
+            fusService.orNull?.reportFusMetrics { collector ->
                 collector.report(NumericalMetrics.COMPILATION_DURATION, totalTimeMs)
                 collector.report(BooleanMetrics.KOTLIN_COMPILATION_FAILED, event.result is FailureResult)
                 val metricsMap = buildMetrics.buildPerformanceMetrics.asMap()
@@ -194,6 +192,7 @@ abstract class BuildMetricsService : BuildService<BuildMetricsService.Parameters
 
         private fun registerIfAbsentImpl(
             project: Project,
+            fusService: Provider<BuildFusService>
         ): Provider<BuildMetricsService>? {
             // Return early if the service was already registered to avoid the overhead of reading the reporting settings below
             project.gradle.sharedServices.registrations.findByName(serviceName)?.let {
@@ -233,9 +232,9 @@ abstract class BuildMetricsService : BuildService<BuildMetricsService.Parameters
                 it.parameters.projectDir.set(project.rootProject.layout.projectDirectory)
                 //init gradle tags for build scan and http reports
                 it.parameters.buildConfigurationTags.value(setupTags(project))
-                it.parameters.fusMetricsConsumer.set(buildFusService.map { it.getFusMetricsConsumer() ?: DummyStatisticsValuesConsumer() })
             }.also {
                 subscribeForTaskEvents(project, it)
+                it.get().fusService = fusService
             }
 
         }
@@ -300,8 +299,8 @@ abstract class BuildMetricsService : BuildService<BuildMetricsService.Parameters
             }
         }
 
-        fun registerIfAbsent(project: Project) =
-            registerIfAbsentImpl(project)?.also { serviceProvider ->
+        fun registerIfAbsent(project: Project, fusService: Provider<BuildFusService>) =
+            registerIfAbsentImpl(project, fusService)?.also { serviceProvider ->
                 SingleActionPerProject.run(project, UsesBuildMetricsService::class.java.name) {
                     project.tasks.withType<UsesBuildMetricsService>().configureEach { task ->
                         task.buildMetricsService.value(serviceProvider).disallowChanges()

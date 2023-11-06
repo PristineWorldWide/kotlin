@@ -24,7 +24,6 @@ import org.jetbrains.kotlin.gradle.plugin.BuildEventsListenerRegistryHolder
 import org.jetbrains.kotlin.gradle.plugin.StatisticsBuildFlowManager
 import org.jetbrains.kotlin.gradle.plugin.internal.isConfigurationCacheRequested
 import org.jetbrains.kotlin.gradle.plugin.internal.isProjectIsolationEnabled
-import org.jetbrains.kotlin.gradle.report.UsesBuildMetricsService
 import org.jetbrains.kotlin.gradle.report.reportingSettings
 import org.jetbrains.kotlin.gradle.tasks.withType
 import org.jetbrains.kotlin.gradle.utils.SingleActionPerProject
@@ -39,8 +38,7 @@ internal interface UsesBuildFusService : Task {
     @get:Internal
     val buildFusService: Property<BuildFusService?>
 }
-
-internal abstract class BuildFusService : BuildService<BuildFusService.Parameters>, AutoCloseable, OperationCompletionListener {
+abstract class BuildFusService : BuildService<BuildFusService.Parameters>, AutoCloseable, OperationCompletionListener {
     private var buildFailed: Boolean = false
     private val log = Logging.getLogger(this.javaClass)
 
@@ -167,7 +165,7 @@ internal abstract class BuildFusService : BuildService<BuildFusService.Parameter
     }
 }
 
-internal class MetricContainer : Serializable {
+class MetricContainer : Serializable {
     private val numericalMetrics = HashMap<NumericalMetrics, Long>()
     private val booleanMetrics = HashMap<BooleanMetrics, Boolean>()
     private val stringMetrics = HashMap<StringMetrics, String>()
