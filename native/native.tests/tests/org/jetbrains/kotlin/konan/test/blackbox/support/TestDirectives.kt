@@ -13,6 +13,7 @@ import org.jetbrains.kotlin.konan.test.blackbox.support.TestDirectives.INPUT_DAT
 import org.jetbrains.kotlin.konan.test.blackbox.support.TestDirectives.KIND
 import org.jetbrains.kotlin.konan.test.blackbox.support.TestDirectives.LLDB_TRACE
 import org.jetbrains.kotlin.konan.test.blackbox.support.TestDirectives.OUTPUT_DATA_FILE
+import org.jetbrains.kotlin.konan.test.blackbox.support.TestDirectives.PROGRAM_ARGS
 import org.jetbrains.kotlin.konan.test.blackbox.support.TestDirectives.TEST_RUNNER
 import org.jetbrains.kotlin.konan.test.blackbox.support.runner.TestRunCheck
 import org.jetbrains.kotlin.konan.test.blackbox.support.runner.TestRunCheck.OutputDataFile
@@ -147,6 +148,13 @@ internal object TestDirectives : SimpleDirectivesContainer() {
 
     val FILECHECK_STAGE by stringDirective(
         description = "Specify a LLVM stage to dump LLVM IR after, and check it with LLVM FileCheck using its directives in test file"
+    )
+
+    val PROGRAM_ARGS by stringDirective(
+        description = """
+            Command line arguments to pass to the executable.
+            Note that this directive makes sense only in combination with // KIND: STANDALONE_NO_TR
+        """.trimIndent()
     )
 }
 
@@ -352,6 +360,8 @@ private fun parseFileBasedDirective(
 
     return file
 }
+
+internal fun parseProgramArguments(registeredDirectives: RegisteredDirectives): List<String> = registeredDirectives[PROGRAM_ARGS]
 
 internal class Location(private val testDataFile: File, val lineNumber: Int? = null) {
     override fun toString() = buildString {
