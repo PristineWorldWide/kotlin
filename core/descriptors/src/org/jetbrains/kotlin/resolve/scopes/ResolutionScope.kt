@@ -29,13 +29,6 @@ interface ResolutionScope {
     fun getContributedClassifiers(name: Name, location: LookupLocation): List<ClassifierDescriptor>
 
     /**
-     * Helper for [getContributedClassifiers] that returns null in case
-     * of ambiguity. Use this function when it's already handled somewhere else.
-     */
-    fun getContributedClassifier(name: Name, location: LookupLocation): ClassifierDescriptor? =
-        getContributedClassifiers(name, location).singleOrNull()
-
-    /**
      * Returns contributed classifier, but discriminates deprecated
      *
      * This method can return some classifier where [getContributedClassifiers] haven't returned any,
@@ -45,13 +38,6 @@ interface ResolutionScope {
      */
     fun getContributedClassifiersIncludeDeprecated(name: Name, location: LookupLocation): List<DescriptorWithDeprecation<ClassifierDescriptor>> =
         getContributedClassifiers(name, location).map { DescriptorWithDeprecation.createNonDeprecated(it) }
-
-    /**
-     * Helper for [getContributedClassifiersIncludeDeprecated] that returns null in case
-     * of ambiguity. Use this function when it's already handled somewhere else.
-     */
-    fun getContributedClassifierIncludeDeprecated(name: Name, location: LookupLocation): DescriptorWithDeprecation<ClassifierDescriptor>? =
-        getContributedClassifiersIncludeDeprecated(name, location).singleOrNull()
 
     fun getContributedVariables(name: Name, location: LookupLocation): Collection<@JvmWildcard VariableDescriptor>
 
@@ -72,3 +58,20 @@ interface ResolutionScope {
         getContributedFunctions(name, location)
     }
 }
+
+/**
+ * Helper for [ResolutionScope.getContributedClassifiers] that returns null in case
+ * of ambiguity. Use this function when it's already handled somewhere else.
+ */
+fun ResolutionScope.getContributedClassifier(name: Name, location: LookupLocation): ClassifierDescriptor? =
+    getContributedClassifiers(name, location).singleOrNull()
+
+/**
+ * Helper for [ResolutionScope.getContributedClassifiersIncludeDeprecated] that returns null in case
+ * of ambiguity. Use this function when it's already handled somewhere else.
+ */
+fun ResolutionScope.getContributedClassifierIncludeDeprecated(
+    name: Name,
+    location: LookupLocation,
+): DescriptorWithDeprecation<ClassifierDescriptor>? =
+    getContributedClassifiersIncludeDeprecated(name, location).singleOrNull()
