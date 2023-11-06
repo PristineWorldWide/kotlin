@@ -66,11 +66,11 @@ abstract class BuildMetricsService : BuildService<BuildMetricsService.Parameters
         val projectName: Property<String>
         val kotlinVersion: Property<String>
         val buildConfigurationTags: ListProperty<StatTag>
+        val fusService: Property<BuildFusService>
     }
 
     private val log = Logging.getLogger(this.javaClass)
     private val buildReportService = BuildReportsService()
-    private lateinit var fusService: Provider<BuildFusService>
 
     // Tasks and transforms' records
     private val buildOperationRecords = ConcurrentLinkedQueue<BuildOperationRecord>()
@@ -118,9 +118,11 @@ abstract class BuildMetricsService : BuildService<BuildMetricsService.Parameters
         taskExecutionResult?.buildMetrics?.also {
             buildMetrics.addAll(it)
 
-            fusService.orNull?.reportFusMetrics { collector ->
+            parameters.fusService.orNull?.reportFusMetrics { collector ->
                 collector.report(NumericalMetrics.COMPILATION_DURATION, totalTimeMs)
                 collector.report(BooleanMetrics.KOTLIN_COMPILATION_FAILED, event.result is FailureResult)
+                collector.report(NumericalMetrics.COMPILATIONS_COUNT, 1)
+
                 val metricsMap = buildMetrics.buildPerformanceMetrics.asMap()
 
                 val linesOfCode = metricsMap[GradleBuildPerformanceMetric.ANALYZED_LINES_NUMBER]
@@ -134,7 +136,6 @@ abstract class BuildMetricsService : BuildService<BuildMetricsService.Parameters
                         collector.report(NumericalMetrics.CODE_GENERATION_LINES_PER_SECOND, value, null, linesOfCode)
                     }
                 }
-                collector.report(NumericalMetrics.COMPILATIONS_COUNT, 1)
                 collector.report(
                     NumericalMetrics.INCREMENTAL_COMPILATIONS_COUNT,
                     if (taskExecutionResult.buildMetrics.buildAttributes.asMap().isEmpty()) 1 else 0
@@ -206,12 +207,6 @@ abstract class BuildMetricsService : BuildService<BuildMetricsService.Parameters
                 return null
             }
 
-            val buildFusService =
-                project.gradle.sharedServices.registrations.findByName(BuildFusService.serviceName)!!.let {
-                    @Suppress("UNCHECKED_CAST")
-                    it.service as Provider<BuildFusService>
-                }
-
             val kotlinVersion = project.getKotlinPluginVersion()
 
             return project.gradle.sharedServices.registerIfAbsent(serviceName, serviceClass) {
@@ -232,9 +227,9 @@ abstract class BuildMetricsService : BuildService<BuildMetricsService.Parameters
                 it.parameters.projectDir.set(project.rootProject.layout.projectDirectory)
                 //init gradle tags for build scan and http reports
                 it.parameters.buildConfigurationTags.value(setupTags(project))
+                it.parameters.fusService.set(fusService)
             }.also {
                 subscribeForTaskEvents(project, it)
-                it.get().fusService = fusService
             }
 
         }
