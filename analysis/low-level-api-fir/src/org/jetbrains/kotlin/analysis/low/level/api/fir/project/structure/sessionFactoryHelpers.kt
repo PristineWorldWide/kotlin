@@ -21,7 +21,6 @@ import org.jetbrains.kotlin.analysis.low.level.api.fir.sessions.LLFirSourcesSess
 import org.jetbrains.kotlin.analysis.low.level.api.fir.util.LLFirExceptionHandler
 import org.jetbrains.kotlin.analysis.project.structure.KtCompilerPluginsProvider
 import org.jetbrains.kotlin.analysis.project.structure.KtSourceModule
-import org.jetbrains.kotlin.analysis.project.structure.moduleScopeProvider
 import org.jetbrains.kotlin.analysis.providers.KotlinResolutionScopeProvider
 import org.jetbrains.kotlin.analysis.providers.createAnnotationResolver
 import org.jetbrains.kotlin.analysis.providers.createDeclarationProvider
