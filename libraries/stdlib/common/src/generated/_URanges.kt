@@ -161,7 +161,7 @@ public fun ULongRange.random(random: Random): ULong {
  * Returns a random element from this range, or `null` if this range is empty.
  */
 @SinceKotlin("1.5")
-@WasExperimental(ExperimentalStdlibApi::class, ExperimentalUnsignedTypes::class)
+@WasExperimental(ExperimentalUnsignedTypes::class)
 @kotlin.internal.InlineOnly
 public inline fun UIntRange.randomOrNull(): UInt? {
     return randomOrNull(Random)
@@ -171,7 +171,7 @@ public inline fun UIntRange.randomOrNull(): UInt? {
  * Returns a random element from this range, or `null` if this range is empty.
  */
 @SinceKotlin("1.5")
-@WasExperimental(ExperimentalStdlibApi::class, ExperimentalUnsignedTypes::class)
+@WasExperimental(ExperimentalUnsignedTypes::class)
 @kotlin.internal.InlineOnly
 public inline fun ULongRange.randomOrNull(): ULong? {
     return randomOrNull(Random)
@@ -181,7 +181,7 @@ public inline fun ULongRange.randomOrNull(): ULong? {
  * Returns a random element from this range using the specified source of randomness, or `null` if this range is empty.
  */
 @SinceKotlin("1.5")
-@WasExperimental(ExperimentalStdlibApi::class, ExperimentalUnsignedTypes::class)
+@WasExperimental(ExperimentalUnsignedTypes::class)
 public fun UIntRange.randomOrNull(random: Random): UInt? {
     if (isEmpty())
         return null
@@ -192,7 +192,7 @@ public fun UIntRange.randomOrNull(random: Random): UInt? {
  * Returns a random element from this range using the specified source of randomness, or `null` if this range is empty.
  */
 @SinceKotlin("1.5")
-@WasExperimental(ExperimentalStdlibApi::class, ExperimentalUnsignedTypes::class)
+@WasExperimental(ExperimentalUnsignedTypes::class)
 public fun ULongRange.randomOrNull(random: Random): ULong? {
     if (isEmpty())
         return null

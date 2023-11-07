@@ -989,7 +989,6 @@ object Elements : TemplateGroupBase() {
         include(Collections, ArraysOfObjects, ArraysOfPrimitives, ArraysOfUnsigned, CharSequences, RangesOfPrimitives)
     } builder {
         since("1.4")
-        wasExperimental("ExperimentalStdlibApi")
         inlineOnly()
         returns("T?")
         doc {
@@ -1051,7 +1050,6 @@ object Elements : TemplateGroupBase() {
         include(Collections, ArraysOfObjects, ArraysOfPrimitives, ArraysOfUnsigned, CharSequences, RangesOfPrimitives)
     } builder {
         since("1.4")
-        wasExperimental("ExperimentalStdlibApi")
         returns("T?")
         doc {
             """
