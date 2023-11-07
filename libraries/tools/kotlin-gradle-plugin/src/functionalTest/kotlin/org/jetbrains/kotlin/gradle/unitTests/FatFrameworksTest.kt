@@ -100,6 +100,46 @@ class FatFrameworksTest {
         assertEquals("barDebugFramework", barFat.attributes.getAttribute(KotlinNativeTarget.kotlinNativeFrameworkNameAttribute))
     }
 
+    @Test
+    fun `consumable configurations of frameworks have correct dependencies on producing tasks`() {
+        val project = buildProjectWithMPP {
+            kotlin {
+                iosX64 { binaries.framework("foo", listOf(DEBUG)) }
+                iosArm64 { binaries.framework("foo", listOf(DEBUG)) }
+            }
+        }
+        project.evaluate()
+
+        fun assertConfigurationsHaveTaskDependencies(
+            configurationName: String,
+            vararg expectedTaskNames: String
+        ) {
+            val actualNames = project.configurations
+                .getByName(configurationName)
+                .outgoing
+                .artifacts
+                .buildDependencies.getDependencies(null)
+                .map { it.path }
+
+            assertEquals(expectedTaskNames.toSet(), actualNames.toSet(), "Unexpected task dependencies for $configurationName")
+        }
+
+        assertConfigurationsHaveTaskDependencies(
+            "fooDebugFrameworkIosX64",
+            ":linkFooDebugFrameworkIosX64"
+        )
+
+        assertConfigurationsHaveTaskDependencies(
+            "fooDebugFrameworkIosArm64",
+            ":linkFooDebugFrameworkIosArm64"
+        )
+
+        assertConfigurationsHaveTaskDependencies(
+            "fooDebugFrameworkIosFat",
+            ":linkFooDebugFrameworkIosFat"
+        )
+    }
+
     private fun testFatFrameworkGrouping(
         vararg allExpectedFatFrameworks: String,
         configureTargets: KotlinMultiplatformExtension.() -> Unit,
