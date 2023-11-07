@@ -359,23 +359,3 @@ private class TransformRecord(
     override val skipMessage: String? = null
     override val icLogLines: List<String> = emptyList()
 }
-
-internal class DummyStatisticsValuesConsumer : IStatisticsValuesConsumer, Serializable {
-    override fun report(metric: BooleanMetrics, value: Boolean, subprojectName: String?, weight: Long?): Boolean {
-        //do nothing
-        return true
-    }
-
-    override fun report(metric: NumericalMetrics, value: Long, subprojectName: String?, weight: Long?): Boolean {
-        //do nothing
-        return true
-    }
-
-    override fun report(metric: StringMetrics, value: String, subprojectName: String?, weight: Long?): Boolean {
-        //do nothing
-        return true
-    }
-
-}
-
-

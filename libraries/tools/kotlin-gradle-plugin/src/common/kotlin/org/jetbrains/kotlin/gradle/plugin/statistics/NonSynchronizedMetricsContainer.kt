@@ -7,7 +7,7 @@ package org.jetbrains.kotlin.gradle.plugin.statistics
 
 import org.jetbrains.kotlin.statistics.metrics.*
 import java.io.Serializable
-import java.util.*
+import kotlin.collections.HashMap
 
 class NonSynchronizedMetricsContainer : IStatisticsValuesConsumer, Serializable {
     data class MetricDescriptor<T: Comparable<T>>(val name: T, val subprojectName: String?) : Comparable<MetricDescriptor<T>> {
@@ -21,11 +21,11 @@ class NonSynchronizedMetricsContainer : IStatisticsValuesConsumer, Serializable 
         }
     }
 
-    private val numericalMetrics = TreeMap<MetricDescriptor<NumericalMetrics>, IMetricContainer<Long>>()
+    private val numericalMetrics = HashMap<MetricDescriptor<NumericalMetrics>, IMetricContainer<Long>>()
 
-    private val booleanMetrics = TreeMap<MetricDescriptor<BooleanMetrics>, IMetricContainer<Boolean>>()
+    private val booleanMetrics = HashMap<MetricDescriptor<BooleanMetrics>, IMetricContainer<Boolean>>()
 
-    private val stringMetrics = TreeMap<MetricDescriptor<StringMetrics>, IMetricContainer<String>>()
+    private val stringMetrics = HashMap<MetricDescriptor<StringMetrics>, IMetricContainer<String>>()
 
     override fun report(metric: BooleanMetrics, value: Boolean, subprojectName: String?, weight: Long?): Boolean {
         val metricContainer = booleanMetrics[MetricDescriptor(metric, subprojectName)] ?: metric.type.newMetricContainer()
