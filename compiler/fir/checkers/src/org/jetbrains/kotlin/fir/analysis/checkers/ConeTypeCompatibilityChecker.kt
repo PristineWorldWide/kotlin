@@ -250,7 +250,9 @@ object ConeTypeCompatibilityChecker {
             is ConeFlexibleType -> lowerBound.collectLowerBounds()
             is ConeCapturedType -> constructor.supertypes?.flatMap { it.collectLowerBounds() }?.toSet().orEmpty()
             is ConeIntegerConstantOperatorType -> setOf(getApproximatedType())
-            is ConeStubType, is ConeIntegerLiteralConstantType -> throw IllegalStateException("$this should not reach here")
+            is ConeStubType, is ConeIntegerLiteralConstantType, is ConeTypeVariableType -> {
+                throw IllegalStateException("$this should not reach here")
+            }
         }
     }
 

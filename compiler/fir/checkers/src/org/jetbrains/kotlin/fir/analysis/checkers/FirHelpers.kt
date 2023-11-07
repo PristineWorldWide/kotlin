@@ -847,7 +847,9 @@ fun ConeKotlinType?.collectUpperBounds(): Set<ConeClassLikeType> {
             is ConeFlexibleType -> collect(type.upperBound)
             is ConeCapturedType -> type.constructor.supertypes?.forEach(::collect)
             is ConeIntegerConstantOperatorType -> upperBounds.add(type.getApproximatedType())
-            is ConeStubType, is ConeIntegerLiteralConstantType -> throw IllegalStateException("$type should not reach here")
+            is ConeStubType, is ConeIntegerLiteralConstantType, is ConeTypeVariableType -> {
+                throw IllegalStateException("$type should not reach here")
+            }
         }
     }
 

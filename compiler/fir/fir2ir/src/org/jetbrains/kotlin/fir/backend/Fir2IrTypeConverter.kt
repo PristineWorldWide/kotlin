@@ -114,7 +114,6 @@ class Fir2IrTypeConverter(
         addRawTypeAnnotation: Boolean = false
     ): IrType {
         return when (this) {
-            is ConeErrorType -> createErrorType()
             is ConeLookupTagBasedType -> {
                 val typeAnnotations = mutableListOf<IrConstructorCall>()
                 typeAnnotations += with(annotationGenerator) { annotations.toIrAnnotations() }
@@ -240,8 +239,7 @@ class Fir2IrTypeConverter(
                 )!!
                 approximated.toIrType(typeOrigin)
             }
-            is ConeStubType -> createErrorType()
-            is ConeIntegerLiteralType -> createErrorType()
+            is ConeErrorType, is ConeStubType, is ConeIntegerLiteralType, is ConeTypeVariableType -> createErrorType()
         }
     }
 
