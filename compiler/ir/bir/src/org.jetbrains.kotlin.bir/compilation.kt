@@ -237,7 +237,6 @@ private class ConvertIrToBirPhase(name: String, description: String, private val
         }
 
         birModule.countAllElementsInTree()
-        //measureElementDistribution(birModule)
 
         return BirCompilationBundle(birModule, birContext, input, profile)
     }
@@ -289,11 +288,19 @@ private object BirLowering : SameTypeCompilerPhase<JvmBackendContext, BirCompila
         }
         //exitProcess(0)
 
+        println("Compiled BIR stats after conversion: ${compiledBir.stats.present()}")
+        compiledBir.stats = BirForest.Stats()
+
         for (phase in input.backendContext.loweringPhases) {
             invokePhaseMeasuringTime(profile, "!BIR - ${phase.javaClass.simpleName}") {
                 phase(input.birModule)
             }
+
+            println("Compiled BIR stats after phase: ${compiledBir.stats.present()}")
+            compiledBir.stats = BirForest.Stats()
         }
+
+        //println("Compiled BIR stats after lowering: ${compiledBir.stats.present()}")
 
         return input
     }

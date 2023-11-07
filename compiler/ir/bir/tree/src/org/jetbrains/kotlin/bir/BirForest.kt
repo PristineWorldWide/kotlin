@@ -5,12 +5,8 @@
 
 package org.jetbrains.kotlin.bir
 
-import org.jetbrains.kotlin.bir.util.ancestors
 import org.jetbrains.kotlin.bir.util.countAllElementsInTree
 import java.lang.AutoCloseable
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
 
 class BirForest : BirElementParent() {
     private val possiblyRootElements = mutableListOf<BirElementBase>()
@@ -22,28 +18,42 @@ class BirForest : BirElementParent() {
     private var elementClassifier: BirElementIndexClassifier? = null
     private var currentElementsIndexSlotIterator: ElementsIndexSlotIterator<*>? = null
     private var currentIndexSlot = 0
-    private val elementsWithInvalidatedIndexBuffer = arrayOfNulls<BirElementBase>(64)
-    private var elementsWithInvalidatedIndexBufferSize = 0
     internal var mutableElementCurrentlyBeingClassified: BirImplElementBase? = null
         private set
 
-    private var isInsideSubtreeShuffleTransaction = false
-    private val dirtyElementsInsideSubtreeShuffleTransaction = mutableListOf<BirElementBase>()
+    private val elementsWithInvalidatedIndexBuffer = arrayOfNulls<BirElementBase>(64)
+    private var elementsWithInvalidatedIndexBufferSize = 0
+
+    private val movedElementBuffer = arrayOfNulls<BirElementBase>(64)
+    private var movedElementBufferSize = 0
+
+    data class Stats(
+        var attachElement: Int = 0,
+        var detachElement: Int = 0,
+        var classifyElement: Int = 0,
+    ) {
+        fun present() = toString().substringAfter('(').removeSuffix(")")
+    }
+
+    var stats = Stats()
 
     internal fun elementAttached(element: BirElementBase) {
-        if (!isInsideSubtreeShuffleTransaction) {
-            element.acceptLite {
-                if (it.root !== this@BirForest) {
+        element.acceptLite {
+            when (it.root) {
+                null -> {
                     attachElement(it)
                     it.walkIntoChildren()
                 }
+                this@BirForest -> {
+                    addToMovedElementsBuffer(it)
+                }
+                else -> TODO("Handle attaching element possibly coming from different forest")
             }
-        } else {
-            markElementDirtyInSubtreeShuffleTransaction(element)
         }
     }
 
     private fun attachElement(element: BirElementBase) {
+        stats.attachElement++
         element.root = this
         addElementToIndex(element)
     }
@@ -66,36 +76,80 @@ class BirForest : BirElementParent() {
     }
 
     internal fun elementDetached(element: BirElementBase) {
-        if (!isInsideSubtreeShuffleTransaction) {
-            if (element._parent === this) {
-                element.setParentWithInvalidation(null)
-            } else {
-                assert(element._parent !is BirForest)
-            }
-
-            element.acceptLite {
-                detachElement(it)
-                it.walkIntoChildren()
-            }
-        } else {
-            markElementDirtyInSubtreeShuffleTransaction(element)
+        when (element.root) {
+            null -> {}
+            this -> addToMovedElementsBuffer(element)
+            else -> TODO("Handle detaching elements with stale root of different forest")
         }
     }
 
     private fun detachElement(element: BirElementBase) {
+        stats.detachElement++
         element.root = null
         removeElementFromIndex(element)
     }
 
     internal fun elementMoved(element: BirElementBase, oldParent: BirElementParent) {
-        // Currently there is nothing to do here. So... yay :)
+        if (element.root != null && element.root !== this || oldParent is BirElementBase && oldParent.root != null && oldParent.root !== this) {
+            TODO("Handle moving elements with stale root of different forest")
+        }
+
+        // There is no actual work to do here. So... yay :)
     }
 
-    private fun markElementDirtyInSubtreeShuffleTransaction(element: BirElementBase) {
-        if (!element.hasFlag(BirElementBase.FLAG_MARKED_DIRTY_IN_SUBTREE_SHUFFLE_TRANSACTION)) {
-            element.setFlag(BirElementBase.FLAG_MARKED_DIRTY_IN_SUBTREE_SHUFFLE_TRANSACTION, true)
-            dirtyElementsInsideSubtreeShuffleTransaction += element
+    private fun addToMovedElementsBuffer(element: BirElementBase) {
+        if (!element.hasFlag(BirElementBase.FLAG_IS_IN_MOVED_ELEMENTS_BUFFER)) {
+            var size = movedElementBufferSize
+            val buffer = movedElementBuffer
+            if (size == buffer.size) {
+                realizeTreeMovements()
+                size = movedElementBufferSize
+            }
+
+            buffer[size] = element
+            movedElementBufferSize = size + 1
+            element.setFlag(BirElementBase.FLAG_IS_IN_MOVED_ELEMENTS_BUFFER, true)
         }
+    }
+
+    internal fun realizeTreeMovements() {
+        val buffer = movedElementBuffer
+        for (i in 0..<movedElementBufferSize) {
+            val element = buffer[i]!!
+            buffer[i] = null
+            element.setFlag(BirElementBase.FLAG_IS_IN_MOVED_ELEMENTS_BUFFER, false)
+
+            val realRoot = element.findRealRoot()
+            val previousRoot = element.root
+            if (realRoot === this) {
+                if (previousRoot !== this) {
+                    element.acceptLite {
+                        when (it.root) {
+                            null -> {
+                                attachElement(it)
+                                it.walkIntoChildren()
+                            }
+                            this@BirForest -> {}
+                            else -> TODO("Handle attaching element possibly coming from different forest")
+                        }
+                    }
+                }
+            } else {
+                if (previousRoot === this) {
+                    if (element._parent === this) {
+                        element.setParentWithInvalidation(null)
+                    } else {
+                        assert(element._parent !is BirForest)
+                    }
+
+                    element.acceptLite {
+                        detachElement(it)
+                        it.walkIntoChildren()
+                    }
+                }
+            }
+        }
+        movedElementBufferSize = 0
     }
 
     private fun getActualRootElements(): List<BirElementBase> {
@@ -113,48 +167,13 @@ class BirForest : BirElementParent() {
     }
 
 
-    /**
-     * Allows to efficiently move around big BIR subtrees within the forest.
-     */
-    @OptIn(ExperimentalContracts::class)
-    fun subtreeShuffleTransaction(block: () -> Unit) {
-        contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
-
-        require(!isInsideSubtreeShuffleTransaction)
-        isInsideSubtreeShuffleTransaction = true
-        block()
-        isInsideSubtreeShuffleTransaction = false
-
-        for (element in dirtyElementsInsideSubtreeShuffleTransaction) {
-            element.setFlag(BirElementBase.FLAG_MARKED_DIRTY_IN_SUBTREE_SHUFFLE_TRANSACTION, false)
-
-            val realRoot = element.findRealRootFromAncestors()
-            val previousRoot = element.root
-            if (realRoot === this) {
-                if (previousRoot !== this) {
-                    elementAttached(element)
-                }
-            } else {
-                if (previousRoot === this) {
-                    elementDetached(element)
-                }
-            }
-        }
-        dirtyElementsInsideSubtreeShuffleTransaction.clear()
-    }
-
-    private fun BirElementBase.findRealRootFromAncestors(): BirForest? {
-        return ancestors(false).firstNotNullOfOrNull { it.root }
-            ?: _parent as? BirForest
-    }
-
-
     private fun addElementToIndex(element: BirElementBase) {
         val classifier = elementClassifier ?: return
         if (element.root !== this) return
 
         val backReferenceRecorder = BackReferenceRecorder()
 
+        stats.classifyElement++
         assert(mutableElementCurrentlyBeingClassified == null)
         if (element is BirImplElementBase) {
             mutableElementCurrentlyBeingClassified = element
@@ -220,19 +239,18 @@ class BirForest : BirElementParent() {
         }
     }
 
-    private fun flushElementsWithInvalidatedIndexBuffer() {
-        val size = elementsWithInvalidatedIndexBufferSize
-        if (size > 0) {
-            val buffer = elementsWithInvalidatedIndexBuffer
-            for (i in 0 until size) {
-                val element = buffer[i]!!
-                if (element.hasFlag(BirElementBase.FLAG_IN_INVALIDATE_INDEX_BUFFER)) {
-                    invalidateElement(element)
-                }
-                buffer[i] = null
+    internal fun flushElementsWithInvalidatedIndexBuffer() {
+        realizeTreeMovements()
+
+        val buffer = elementsWithInvalidatedIndexBuffer
+        for (i in 0..< elementsWithInvalidatedIndexBufferSize) {
+            val element = buffer[i]!!
+            if (element.hasFlag(BirElementBase.FLAG_IN_INVALIDATE_INDEX_BUFFER)) {
+                invalidateElement(element)
             }
-            elementsWithInvalidatedIndexBufferSize = 0
+            buffer[i] = null
         }
+        elementsWithInvalidatedIndexBufferSize = 0
     }
 
     internal fun invalidateElement(element: BirElementBase) {
@@ -250,8 +268,6 @@ class BirForest : BirElementParent() {
     }
 
     fun applyNewRegisteredIndices() {
-        require(!isInsideSubtreeShuffleTransaction)
-
         if (registeredIndexers.size != elementIndexSlotCount) {
             val indexers = registeredIndexers.mapIndexed { i, indexerKey ->
                 val index = i + 1
@@ -284,7 +300,7 @@ class BirForest : BirElementParent() {
     }
 
     fun reindexAllElements() {
-        require(!isInsideSubtreeShuffleTransaction)
+        realizeTreeMovements()
 
         val roots = getActualRootElements()
         for (root in roots) {
@@ -296,8 +312,6 @@ class BirForest : BirElementParent() {
     }
 
     fun <E : BirElement> getElementsWithIndex(key: BirElementsIndexKey<E>): Sequence<E> {
-        require(!isInsideSubtreeShuffleTransaction)
-
         flushElementsWithInvalidatedIndexBuffer()
 
         currentElementsIndexSlotIterator?.let { iterator ->
