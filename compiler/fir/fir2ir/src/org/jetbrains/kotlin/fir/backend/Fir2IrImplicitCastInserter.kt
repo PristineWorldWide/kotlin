@@ -234,6 +234,23 @@ class Fir2IrImplicitCastInserter(
         }
     }
 
+    internal fun IrExpression.insertCastForSmartcastWithIntersection(
+        argumentType: ConeKotlinType,
+        expectedType: ConeKotlinType
+    ): IrExpression {
+        if (argumentType !is ConeIntersectionType) return this
+        val approximatedArgumentType = argumentType.approximateForIrOrNull() ?: argumentType
+        if (approximatedArgumentType.isSubtypeOf(expectedType, session)) return this
+        if (!argumentType.isSubtypeOf(expectedType, session)) {
+            // If an argument type may be not a subtype of the expected type only in one situation: when
+            //   there was some functional/SAM conversion
+            // In this case, there is no need to insert cast from the smartcast type, because the conversion will be
+            //  processed later
+            return this
+        }
+        return implicitCast(this, expectedType.toIrType())
+    }
+
     private fun ConeKotlinType.acceptsNullValues(): Boolean {
         return canBeNull || hasEnhancedNullability
     }

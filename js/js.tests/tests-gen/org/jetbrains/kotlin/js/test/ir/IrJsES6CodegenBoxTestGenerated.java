@@ -35104,6 +35104,12 @@ public class IrJsES6CodegenBoxTestGenerated extends AbstractIrJsES6CodegenBoxTes
         }
 
         @Test
+        @TestMetadata("smartcastFromGenericToString.kt")
+        public void testSmartcastFromGenericToString() throws Exception {
+            runTest("compiler/testData/codegen/box/smartCasts/smartcastFromGenericToString.kt");
+        }
+
+        @Test
         @TestMetadata("smartcastOnDynamic.kt")
         public void testSmartcastOnDynamic() throws Exception {
             runTest("compiler/testData/codegen/box/smartCasts/smartcastOnDynamic.kt");
