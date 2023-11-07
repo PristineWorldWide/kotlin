@@ -10,7 +10,7 @@ package kotlin.text
  *
  * String builder can be used to efficiently perform multiple string manipulation operations.
  */
-public actual class StringBuilder actual constructor(content: String) : Appendable, CharSequence {
+public actual class StringBuilder public actual constructor(content: String) : Appendable, CharSequence {
     /**
      * Constructs an empty string builder with the specified initial [capacity].
      *
