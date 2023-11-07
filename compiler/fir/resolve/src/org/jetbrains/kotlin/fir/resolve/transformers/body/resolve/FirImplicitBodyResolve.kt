@@ -31,6 +31,7 @@ import org.jetbrains.kotlin.fir.symbols.lazyResolveToPhase
 import org.jetbrains.kotlin.fir.types.FirImplicitTypeRef
 import org.jetbrains.kotlin.fir.types.FirResolvedTypeRef
 import org.jetbrains.kotlin.fir.types.builder.buildErrorTypeRef
+import org.jetbrains.kotlin.fir.types.rebindAnnotations
 import org.jetbrains.kotlin.fir.visitors.FirTransformer
 import org.jetbrains.kotlin.util.PrivateForInline
 
@@ -253,7 +254,7 @@ open class ReturnTypeCalculatorWithJump(
                 val baseDeclaration = baseSymbol.fir as FirCallableDeclaration
                 val baseReturnTypeRef = tryCalculateReturnType(baseDeclaration)
                 val baseReturnType = baseReturnTypeRef.type
-                val coneType = substitutor.substituteOrSelf(baseReturnType)
+                val coneType = substitutor.substituteOrSelf(baseReturnType).rebindAnnotations(declaration.symbol)
                 val returnType = declaration.returnTypeRef.resolvedTypeFromPrototype(coneType)
                 declaration.replaceReturnTypeRef(returnType)
                 if (declaration is FirProperty) {

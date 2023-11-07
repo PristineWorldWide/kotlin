@@ -1,38 +1,38 @@
 @R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/Collection<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/String>>?
   context -> FirNamedFunctionSymbol second/SubClass.resolveMe
-  anchor -> [FirRegularClassSymbol second/SubClass]
+  anchor -> [FirNamedFunctionSymbol second/SubClass.resolveMe]
 
 @R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/Collection<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/String>
   context -> FirNamedFunctionSymbol second/SubClass.resolveMe
-  anchor -> [FirRegularClassSymbol second/SubClass]
+  anchor -> [FirNamedFunctionSymbol second/SubClass.resolveMe]
 
 @R|second/Anno|(LAZY_EXPRESSION)  kotlin/String
   context -> FirNamedFunctionSymbol second/SubClass.resolveMe
-  anchor -> [FirRegularClassSymbol second/SubClass]
+  anchor -> [FirNamedFunctionSymbol second/SubClass.resolveMe]
 
 @R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/Collection<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/String>>
   context -> FirNamedFunctionSymbol second/SubClass.resolveMe
-  anchor -> [FirRegularClassSymbol second/SubClass]
+  anchor -> [FirNamedFunctionSymbol second/SubClass.resolveMe]
 
 @R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/Collection<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/String>
   context -> FirNamedFunctionSymbol second/SubClass.resolveMe
-  anchor -> [FirRegularClassSymbol second/SubClass]
+  anchor -> [FirNamedFunctionSymbol second/SubClass.resolveMe]
 
 @R|second/Anno|(LAZY_EXPRESSION)  kotlin/String
   context -> FirNamedFunctionSymbol second/SubClass.resolveMe
-  anchor -> [FirRegularClassSymbol second/SubClass]
+  anchor -> [FirNamedFunctionSymbol second/SubClass.resolveMe]
 
 @R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/Collection<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/String>>
   context -> FirValueParameterSymbol <local>/param from FirNamedFunctionSymbol second/SubClass.resolveMe
-  anchor -> [FirRegularClassSymbol second/SubClass]
+  anchor -> [FirValueParameterSymbol <local>/param]
 
 @R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/Collection<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/String>
   context -> FirValueParameterSymbol <local>/param from FirNamedFunctionSymbol second/SubClass.resolveMe
-  anchor -> [FirRegularClassSymbol second/SubClass]
+  anchor -> [FirValueParameterSymbol <local>/param]
 
 @R|second/Anno|(LAZY_EXPRESSION)  kotlin/String
   context -> FirValueParameterSymbol <local>/param from FirNamedFunctionSymbol second/SubClass.resolveMe
-  anchor -> [FirRegularClassSymbol second/SubClass]
+  anchor -> [FirValueParameterSymbol <local>/param]
 
 
 TARGET: public final [ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] [SubstitutedOverrideOriginalKey=second/AbstractClass.resolveMe] fun R|@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/Collection<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/String>>|.resolveMe([ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] [SubstitutedOverrideOriginalKey=<local>/param] param: R|@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/Collection<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/String>>|): R|@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/Collection<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/String>>?|

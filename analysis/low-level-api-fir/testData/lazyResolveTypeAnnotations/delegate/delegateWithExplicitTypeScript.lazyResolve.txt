@@ -173,7 +173,7 @@ FILE: [ResolvedTo(IMPORTS)] delegateWithExplicitTypeScript.kts
         }
 
         public abstract [ResolvedTo(STATUS)] interface OriginalInterface : R|kotlin/Any| {
-            @R|Anno|[Types](position = <strcat>(String(explicitType ), R|/prop|)) public open [ResolvedTo(STATUS)] fun R|@R|Anno|(position = <strcat>(String(receiver type ), R|/prop|))  kotlin/collections/Collection<@R|Anno|(position = <strcat>(String(nested receiver type ), R|/prop|))  kotlin/collections/List<@R|Anno|(position = <strcat>(String(nested nested receiver type ), R|/prop|))  kotlin/String>>|.explicitType(): R|@R|Anno|(position = <strcat>(String(explicitType return type ), R|/prop|))  kotlin/collections/List<@R|Anno|(position = <strcat>(String(explicitType nested return type ), R|/prop|))  kotlin/collections/List<@R|Anno|(position = <strcat>(String(explicitType nested nested return type ), R|/prop|))  kotlin/Int>>| { LAZY_BLOCK }
+            @R|Anno|[Types](position = <strcat>(String(explicitType ), R|/prop|)) public open [ResolvedTo(STATUS)] fun R|@R|Anno|(position = <strcat>(String(receiver type ), R|/prop|))  kotlin/collections/Collection<@R|Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/String>>|.explicitType(): R|@R|Anno|(position = <strcat>(String(explicitType return type ), R|/prop|))  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/Int>>| { LAZY_BLOCK }
 
         }
 
@@ -209,7 +209,7 @@ FILE: [ResolvedTo(IMPORTS)] delegateWithExplicitTypeScript.kts
         }
 
         public abstract [ResolvedTo(STATUS)] interface OriginalInterface : R|kotlin/Any| {
-            @R|Anno|[Types](position = <strcat>(String(explicitType ), R|/prop|)) public open [ResolvedTo(STATUS)] fun R|@R|Anno|(position = <strcat>(String(receiver type ), R|/prop|))  kotlin/collections/Collection<@R|Anno|(position = <strcat>(String(nested receiver type ), R|/prop|))  kotlin/collections/List<@R|Anno|(position = <strcat>(String(nested nested receiver type ), R|/prop|))  kotlin/String>>|.explicitType(): R|@R|Anno|(position = <strcat>(String(explicitType return type ), R|/prop|))  kotlin/collections/List<@R|Anno|(position = <strcat>(String(explicitType nested return type ), R|/prop|))  kotlin/collections/List<@R|Anno|(position = <strcat>(String(explicitType nested nested return type ), R|/prop|))  kotlin/Int>>| { LAZY_BLOCK }
+            @R|Anno|[Types](position = <strcat>(String(explicitType ), R|/prop|)) public open [ResolvedTo(STATUS)] fun R|@R|Anno|(position = <strcat>(String(receiver type ), R|/prop|))  kotlin/collections/Collection<@R|Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/String>>|.explicitType(): R|@R|Anno|(position = <strcat>(String(explicitType return type ), R|/prop|))  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/Int>>| { LAZY_BLOCK }
 
         }
 

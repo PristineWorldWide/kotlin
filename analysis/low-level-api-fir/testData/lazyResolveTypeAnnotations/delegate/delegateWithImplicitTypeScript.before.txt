@@ -1,26 +1,26 @@
 @R|Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/Int>>
   context -> FirNamedFunctionSymbol /Derived.implicitType
-  anchor -> [FirNamedFunctionSymbol /explicitType]
+  anchor -> [FirNamedFunctionSymbol /Derived.implicitType]
 
 @R|Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/Int>
   context -> FirNamedFunctionSymbol /Derived.implicitType
-  anchor -> [FirNamedFunctionSymbol /explicitType]
+  anchor -> [FirNamedFunctionSymbol /Derived.implicitType]
 
 @R|Anno|(LAZY_EXPRESSION)  kotlin/Int
   context -> FirNamedFunctionSymbol /Derived.implicitType
-  anchor -> [FirNamedFunctionSymbol /explicitType]
+  anchor -> [FirNamedFunctionSymbol /Derived.implicitType]
 
 @R|Anno|(LAZY_EXPRESSION)  kotlin/collections/Collection<@R|Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/String>>
   context -> FirNamedFunctionSymbol /Derived.implicitType
-  anchor -> [FirNamedFunctionSymbol /OriginalInterface.implicitType]
+  anchor -> [FirNamedFunctionSymbol /Derived.implicitType]
 
 @R|Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/String>
   context -> FirNamedFunctionSymbol /Derived.implicitType
-  anchor -> [FirNamedFunctionSymbol /OriginalInterface.implicitType]
+  anchor -> [FirNamedFunctionSymbol /Derived.implicitType]
 
 @R|Anno|(LAZY_EXPRESSION)  kotlin/String
   context -> FirNamedFunctionSymbol /Derived.implicitType
-  anchor -> [FirNamedFunctionSymbol /OriginalInterface.implicitType]
+  anchor -> [FirNamedFunctionSymbol /Derived.implicitType]
 
 
 TARGET: @R|Anno|[Types](LAZY_EXPRESSION) public open [ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] [DelegatedWrapperDataKey=[wrapped=FirNamedFunctionSymbol /OriginalInterface.implicitType, containingClass=Derived, delegateField=FirFieldSymbol /Derived.$$delegate_0] fun R|@R|Anno|(LAZY_EXPRESSION)  kotlin/collections/Collection<@R|Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/String>>|.implicitType(): R|@R|Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|Anno|(LAZY_EXPRESSION)  kotlin/Int>>|

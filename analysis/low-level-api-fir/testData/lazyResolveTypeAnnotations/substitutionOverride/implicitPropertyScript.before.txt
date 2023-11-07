@@ -1,14 +1,14 @@
 @R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/Collection<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/String>>?
   context -> FirPropertySymbol second/SubClass.resolveMe
-  anchor -> [FirRegularClassSymbol second/SubClass]
+  anchor -> [FirPropertySymbol second/SubClass.resolveMe]
 
 @R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/Collection<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/String>
   context -> FirPropertySymbol second/SubClass.resolveMe
-  anchor -> [FirRegularClassSymbol second/SubClass]
+  anchor -> [FirPropertySymbol second/SubClass.resolveMe]
 
 @R|second/Anno|(LAZY_EXPRESSION)  kotlin/String
   context -> FirPropertySymbol second/SubClass.resolveMe
-  anchor -> [FirRegularClassSymbol second/SubClass]
+  anchor -> [FirPropertySymbol second/SubClass.resolveMe]
 
 
 TARGET: public final [ResolvedTo(IMPLICIT_TYPES_BODY_RESOLVE)] [SubstitutedOverrideOriginalKey=second/AbstractClass.resolveMe] var resolveMe: R|@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/List<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/collections/Collection<@R|second/Anno|(LAZY_EXPRESSION)  kotlin/String>>?|

@@ -14,6 +14,7 @@ import org.jetbrains.kotlin.fir.resolvedTypeFromPrototype
 import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
 import org.jetbrains.kotlin.fir.types.FirResolvedTypeRef
 import org.jetbrains.kotlin.fir.types.FirTypeRef
+import org.jetbrains.kotlin.fir.types.rebindAnnotations
 
 abstract class CallableCopyTypeCalculator {
     abstract fun computeReturnType(declaration: FirCallableDeclaration): FirTypeRef?
@@ -38,7 +39,7 @@ abstract class CallableCopyTypeCalculator {
                 val (substitutor, baseSymbol) = callableCopySubstitutionForTypeUpdater
                 val baseDeclaration = baseSymbol.fir as FirCallableDeclaration
                 val baseReturnType = computeReturnType(baseDeclaration)?.type ?: return null
-                val coneType = substitutor.substituteOrSelf(baseReturnType)
+                val coneType = substitutor.substituteOrSelf(baseReturnType).rebindAnnotations(declaration.symbol)
                 val returnType = declaration.returnTypeRef.resolvedTypeFromPrototype(coneType)
                 declaration.replaceReturnTypeRef(returnType)
                 declaration.attributes.callableCopySubstitutionForTypeUpdater = null
