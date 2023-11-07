@@ -6654,6 +6654,12 @@ public class LLFirPreresolvedReversedDiagnosticCompilerFE10TestDataTestGenerated
                 KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("compiler/testData/diagnostics/tests/contracts"), Pattern.compile("^(.+)\\.(kt|kts)$"), Pattern.compile("^(.+)\\.(reversed|fir|ll)\\.kts?$"), true, "multiplatform");
             }
 
+            @Test
+            @TestMetadata("contractImpliesTypeParameters.kt")
+            public void testContractImpliesTypeParameters() throws Exception {
+                runTest("compiler/testData/diagnostics/tests/contracts/contractImpliesTypeParameters.kt");
+            }
+
             @Nested
             @TestMetadata("compiler/testData/diagnostics/tests/contracts/neg")
             @TestDataPath("$PROJECT_ROOT")
@@ -7255,6 +7261,12 @@ public class LLFirPreresolvedReversedDiagnosticCompilerFE10TestDataTestGenerated
             }
 
             @Test
+            @TestMetadata("reassignmentWithLambda.kt")
+            public void testReassignmentWithLambda() throws Exception {
+                runTest("compiler/testData/diagnostics/tests/controlFlowAnalysis/reassignmentWithLambda.kt");
+            }
+
+            @Test
             @TestMetadata("referenceToPropertyInitializer.kt")
             public void testReferenceToPropertyInitializer() throws Exception {
                 runTest("compiler/testData/diagnostics/tests/controlFlowAnalysis/referenceToPropertyInitializer.kt");
@@ -7537,6 +7549,12 @@ public class LLFirPreresolvedReversedDiagnosticCompilerFE10TestDataTestGenerated
                 @TestMetadata("returnInDeadLambda.kt")
                 public void testReturnInDeadLambda() throws Exception {
                     runTest("compiler/testData/diagnostics/tests/controlFlowAnalysis/deadCode/returnInDeadLambda.kt");
+                }
+
+                @Test
+                @TestMetadata("smartCastAfterDeadCode.kt")
+                public void testSmartCastAfterDeadCode() throws Exception {
+                    runTest("compiler/testData/diagnostics/tests/controlFlowAnalysis/deadCode/smartCastAfterDeadCode.kt");
                 }
             }
 
@@ -31181,6 +31199,12 @@ public class LLFirPreresolvedReversedDiagnosticCompilerFE10TestDataTestGenerated
             }
 
             @Test
+            @TestMetadata("complexSealedContracts.kt")
+            public void testComplexSealedContracts() throws Exception {
+                runTest("compiler/testData/diagnostics/tests/smartCasts/complexSealedContracts.kt");
+            }
+
+            @Test
             @TestMetadata("dataFlowInfoForArguments.kt")
             public void testDataFlowInfoForArguments() throws Exception {
                 runTest("compiler/testData/diagnostics/tests/smartCasts/dataFlowInfoForArguments.kt");
@@ -33182,6 +33206,12 @@ public class LLFirPreresolvedReversedDiagnosticCompilerFE10TestDataTestGenerated
                 }
 
                 @Test
+                @TestMetadata("capturedInlineModifiedBefore.kt")
+                public void testCapturedInlineModifiedBefore() throws Exception {
+                    runTest("compiler/testData/diagnostics/tests/smartCasts/varnotnull/capturedInlineModifiedBefore.kt");
+                }
+
+                @Test
                 @TestMetadata("doWhileWithBreak.kt")
                 public void testDoWhileWithBreak() throws Exception {
                     runTest("compiler/testData/diagnostics/tests/smartCasts/varnotnull/doWhileWithBreak.kt");
@@ -33191,6 +33221,12 @@ public class LLFirPreresolvedReversedDiagnosticCompilerFE10TestDataTestGenerated
                 @TestMetadata("doWhileWithMiddleBreak.kt")
                 public void testDoWhileWithMiddleBreak() throws Exception {
                     runTest("compiler/testData/diagnostics/tests/smartCasts/varnotnull/doWhileWithMiddleBreak.kt");
+                }
+
+                @Test
+                @TestMetadata("equalityAndIdentity.kt")
+                public void testEqualityAndIdentity() throws Exception {
+                    runTest("compiler/testData/diagnostics/tests/smartCasts/varnotnull/equalityAndIdentity.kt");
                 }
 
                 @Test
