@@ -1,4 +1,3 @@
-// KIND: STANDALONE_NO_TR
 // OUTPUT_DATA_FILE: differentEntry.out
 // ENTRY_POINT: foo
 

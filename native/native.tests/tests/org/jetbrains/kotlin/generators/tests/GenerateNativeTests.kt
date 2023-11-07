@@ -359,7 +359,7 @@ fun main() {
             testClass<AbstractNativeBlackBoxTest>(
                 suiteTestClassName = "NativeStandaloneTestGenerated",
                 annotations = listOf(
-                    standalone(),
+                    *standalone(),
                     provider<UseStandardTestCaseGroupProvider>(),
                 )
             ) {
@@ -368,7 +368,7 @@ fun main() {
             testClass<AbstractNativeBlackBoxTest>(
                 suiteTestClassName = "FirNativeStandaloneTestGenerated",
                 annotations = listOf(
-                    standalone(),
+                    *standalone(),
                     provider<UseStandardTestCaseGroupProvider>(),
                     *frontendFir(),
                 )
@@ -418,4 +418,11 @@ private fun infrastructure() = annotation(Tag::class.java, "infrastructure")
 private fun k1libContents() = annotation(Tag::class.java, "k1libContents")
 private fun k2libContents() = annotation(Tag::class.java, "k2libContents")
 private fun atomicfuNative() = annotation(Tag::class.java, "atomicfu-native")
-private fun standalone() = annotation(Tag::class.java, "standalone")
+private fun standalone() = arrayOf(
+    annotation(Tag::class.java, "standalone"),
+    annotation(
+        EnforcedProperty::class.java,
+        "property" to ClassLevelProperty.TEST_KIND,
+        "propertyValue" to "STANDALONE_NO_TR"
+    )
+)

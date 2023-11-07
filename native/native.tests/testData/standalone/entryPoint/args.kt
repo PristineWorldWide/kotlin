@@ -1,4 +1,3 @@
-// KIND: STANDALONE_NO_TR
 // PROGRAM_ARGS: AAA BB C
 
 import kotlin.test.*

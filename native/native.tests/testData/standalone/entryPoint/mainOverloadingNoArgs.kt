@@ -1,4 +1,3 @@
-// KIND: STANDALONE_NO_TR
 // OUTPUT_DATA_FILE: mainOverloading.out
 
 import kotlin.test.*

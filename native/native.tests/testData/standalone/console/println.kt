@@ -1,4 +1,3 @@
-// KIND: STANDALONE_NO_TR
 // OUTPUT_DATA_FILE: println.out
 @file:OptIn(kotlinx.cinterop.ExperimentalForeignApi::class)
 

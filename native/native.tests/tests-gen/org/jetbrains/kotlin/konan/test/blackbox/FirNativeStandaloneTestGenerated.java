@@ -8,6 +8,8 @@ package org.jetbrains.kotlin.konan.test.blackbox;
 import com.intellij.testFramework.TestDataPath;
 import org.jetbrains.kotlin.test.util.KtTestUtil;
 import org.junit.jupiter.api.Tag;
+import org.jetbrains.kotlin.konan.test.blackbox.support.EnforcedProperty;
+import org.jetbrains.kotlin.konan.test.blackbox.support.ClassLevelProperty;
 import org.jetbrains.kotlin.konan.test.blackbox.support.group.UseStandardTestCaseGroupProvider;
 import org.jetbrains.kotlin.konan.test.blackbox.support.group.FirPipeline;
 import org.jetbrains.kotlin.test.TestMetadata;
@@ -22,6 +24,7 @@ import java.util.regex.Pattern;
 @TestMetadata("native/native.tests/testData/standalone")
 @TestDataPath("$PROJECT_ROOT")
 @Tag("standalone")
+@EnforcedProperty(property = ClassLevelProperty.TEST_KIND, propertyValue = "STANDALONE_NO_TR")
 @UseStandardTestCaseGroupProvider()
 @Tag("frontend-fir")
 @FirPipeline()
@@ -35,6 +38,7 @@ public class FirNativeStandaloneTestGenerated extends AbstractNativeBlackBoxTest
     @TestMetadata("native/native.tests/testData/standalone/console")
     @TestDataPath("$PROJECT_ROOT")
     @Tag("standalone")
+    @EnforcedProperty(property = ClassLevelProperty.TEST_KIND, propertyValue = "STANDALONE_NO_TR")
     @UseStandardTestCaseGroupProvider()
     @Tag("frontend-fir")
     @FirPipeline()
@@ -91,6 +95,7 @@ public class FirNativeStandaloneTestGenerated extends AbstractNativeBlackBoxTest
     @TestMetadata("native/native.tests/testData/standalone/entryPoint")
     @TestDataPath("$PROJECT_ROOT")
     @Tag("standalone")
+    @EnforcedProperty(property = ClassLevelProperty.TEST_KIND, propertyValue = "STANDALONE_NO_TR")
     @UseStandardTestCaseGroupProvider()
     @Tag("frontend-fir")
     @FirPipeline()

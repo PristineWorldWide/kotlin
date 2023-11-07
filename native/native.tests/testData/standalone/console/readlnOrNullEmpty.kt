@@ -1,4 +1,3 @@
-// KIND: STANDALONE_NO_TR
 // INPUT_DATA_FILE: readlnOrNullEmpty.in
 
 import kotlin.test.*
