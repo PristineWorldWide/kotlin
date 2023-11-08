@@ -197,7 +197,7 @@ internal open class GradleCompilerRunner(
                     KotlinBuildStatsService.getInstance()?.apply {
                         val args = K2JSCompilerArguments()
                         parseCommandLineArguments(argsArray.toList(), args)
-                        if (!args.isPreIrBackendDisabled() || args.irProduceJs) {
+                        if (args.irProduceJs) {
                             report(BooleanMetrics.JS_SOURCE_MAP, args.sourceMap)
                         }
                         if (args.irProduceJs) {

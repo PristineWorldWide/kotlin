@@ -328,11 +328,9 @@ class JpsKotlinCompilerRunner {
         settings: K2JSCompilerArguments
     ) {
         with(settings) {
-            noStdlib = true
             freeArgs = allSourceFiles.map { it.path }.toMutableList()
             commonSources = _commonSources.map { it.path }.toTypedArray()
             outputDir = _outputFile.path
-            metaInfo = true
             libraries = _libraries.joinToString(File.pathSeparator)
             friendModules = _friendModules.joinToString(File.pathSeparator)
         }

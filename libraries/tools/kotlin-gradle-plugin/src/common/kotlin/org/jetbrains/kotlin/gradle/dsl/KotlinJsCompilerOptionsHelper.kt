@@ -14,10 +14,8 @@ internal object KotlinJsCompilerOptionsHelper {
         org.jetbrains.kotlin.gradle.dsl.KotlinCommonCompilerOptionsHelper.fillCompilerArguments(from, args)
         args.friendModulesDisabled = from.friendModulesDisabled.get()
         args.main = from.main.get().mode
-        args.metaInfo = from.metaInfo.get()
         args.moduleKind = from.moduleKind.get().kind
         args.moduleName = from.moduleName.orNull
-        args.noStdlib = from.noStdlib.get()
         args.sourceMap = from.sourceMap.get()
         args.sourceMapEmbedSources = from.sourceMapEmbedSources.orNull?.mode
         args.sourceMapNamesPolicy = from.sourceMapNamesPolicy.orNull?.policy
