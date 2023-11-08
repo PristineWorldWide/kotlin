@@ -2612,6 +2612,12 @@ public class ClassicJsIrTextTestGenerated extends AbstractClassicJsIrTextTest {
             }
 
             @Test
+            @TestMetadata("dynamicInDataClass.kt")
+            public void testDynamicInDataClass() throws Exception {
+                runTest("compiler/testData/ir/irText/js/dynamic/dynamicInDataClass.kt");
+            }
+
+            @Test
             @TestMetadata("dynamicInfixCall.kt")
             public void testDynamicInfixCall() throws Exception {
                 runTest("compiler/testData/ir/irText/js/dynamic/dynamicInfixCall.kt");
