@@ -6,6 +6,7 @@
 #pragma once
 
 #include "Memory.h"
+#include "std_support/AtomicRef.hpp"
 
 // Concurrent GC may cause conflicting unordered accesses to references in heap.
 // C++ memory model declares that accesses have data race unless they are atomic.
@@ -31,17 +32,6 @@ namespace kotlin::mm {
  * No GC barriers are inserted. Should be used with care!
  */
 class DirectRefAccessor {
-    static constexpr auto builtinOrder(std::memory_order stdOrder) {
-        switch(stdOrder) {
-            case (std::memory_order_relaxed): return __ATOMIC_RELAXED;
-            case (std::memory_order_consume): return __ATOMIC_CONSUME;
-            case (std::memory_order_acquire): return __ATOMIC_ACQUIRE;
-            case (std::memory_order_release): return __ATOMIC_RELEASE;
-            case (std::memory_order_acq_rel): return __ATOMIC_ACQ_REL;
-            case (std::memory_order_seq_cst): return __ATOMIC_SEQ_CST;
-        }
-    }
-
 public:
     DirectRefAccessor() = delete;
     DirectRefAccessor& operator=(const DirectRefAccessor&) = delete;
@@ -79,17 +69,24 @@ public:
 // TODO: Consider using alternative ways of ordering memory operations
 //       if they turn out to be more efficient on these platforms.
 #pragma clang diagnostic ignored "-Watomic-alignment"
+    ALWAYS_INLINE auto atomic() noexcept {
+        return std_support::atomic_ref<ObjHeader*>{ref_};
+    }
+    ALWAYS_INLINE auto atomic() const noexcept {
+        return std_support::atomic_ref<ObjHeader*>{ref_};
+    }
+
     ALWAYS_INLINE ObjHeader* loadAtomic(std::memory_order order) const noexcept {
-        return __atomic_load_n(&ref_, builtinOrder(order));
+        return atomic().load(order);
     }
     ALWAYS_INLINE void storeAtomic(ObjHeader* desired, std::memory_order order) noexcept {
-        __atomic_store_n(&ref_, desired, builtinOrder(order));
+        atomic().store(desired, order);
     }
     ALWAYS_INLINE ObjHeader* exchange(ObjHeader* desired, std::memory_order order) noexcept {
-        return __atomic_exchange_n(&ref_, desired, builtinOrder(order));
+        return atomic().exchange(desired, order);
     }
     ALWAYS_INLINE bool compareAndExchange(ObjHeader*& expected, ObjHeader* desired, std::memory_order order) noexcept {
-        return __atomic_compare_exchange_n(&ref_, &expected, desired, false, builtinOrder(order), builtinOrder(order));
+        return atomic().compare_exchange_strong(expected, desired, order);
     }
 #pragma clang diagnostic pop
 
