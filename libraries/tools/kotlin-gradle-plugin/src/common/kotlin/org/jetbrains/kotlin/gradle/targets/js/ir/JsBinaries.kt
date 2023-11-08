@@ -49,14 +49,14 @@ sealed class JsIrBinary(
     }
 
     val mainFilePath: Provider<Path> by lazy {
-        linkTask.zip(mainFileName) { linkTask, mainFileName ->
-            linkTask.destinationDirectory.get().asFile.toPath().resolve(mainFileName)
+        linkTask.map {
+            it.destinationDirectory.get().asFile.toPath().resolve(mainFileName.get())
         }
     }
 
     val mainFileSyncPath: Provider<Path> by lazy {
-        linkSyncTask.zip(mainFileName) { syncTask, mainFileName ->
-            syncTask.destinationDirectory.get().toPath().resolve(mainFileName)
+        linkSyncTask.map {
+            it.destinationDirectory.get().toPath().resolve(mainFileName.get())
         }
     }
 
