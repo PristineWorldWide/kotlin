@@ -12826,6 +12826,12 @@ public class FirLightTreeOldFrontendDiagnosticsTestGenerated extends AbstractFir
                 }
 
                 @Test
+                @TestMetadata("noRedeclaration.kt")
+                public void testNoRedeclaration() throws Exception {
+                    runTest("compiler/testData/diagnostics/tests/extensions/contextReceivers/noRedeclaration.kt");
+                }
+
+                @Test
                 @TestMetadata("nonConflicting.kt")
                 public void testNonConflicting() throws Exception {
                     runTest("compiler/testData/diagnostics/tests/extensions/contextReceivers/nonConflicting.kt");
