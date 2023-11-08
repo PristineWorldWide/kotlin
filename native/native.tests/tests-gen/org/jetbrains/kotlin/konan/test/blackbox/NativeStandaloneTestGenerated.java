@@ -166,9 +166,69 @@ public class NativeStandaloneTestGenerated extends AbstractNativeBlackBoxTest {
         }
 
         @Test
-        @TestMetadata("mainException.kt")
-        public void testMainException() throws Exception {
-            runTest("native/native.tests/testData/standalone/termination/mainException.kt");
+        @TestMetadata("globalThrow.kt")
+        public void testGlobalThrow() throws Exception {
+            runTest("native/native.tests/testData/standalone/termination/globalThrow.kt");
+        }
+
+        @Test
+        @TestMetadata("mainThrow.kt")
+        public void testMainThrow() throws Exception {
+            runTest("native/native.tests/testData/standalone/termination/mainThrow.kt");
+        }
+
+        @Test
+        @TestMetadata("processUnhandledException.kt")
+        public void testProcessUnhandledException() throws Exception {
+            runTest("native/native.tests/testData/standalone/termination/processUnhandledException.kt");
+        }
+
+        @Test
+        @TestMetadata("terminateWithUnhandledException.kt")
+        public void testTerminateWithUnhandledException() throws Exception {
+            runTest("native/native.tests/testData/standalone/termination/terminateWithUnhandledException.kt");
+        }
+
+        @Test
+        @TestMetadata("unhandledExceptionHookClosure.kt")
+        public void testUnhandledExceptionHookClosure() throws Exception {
+            runTest("native/native.tests/testData/standalone/termination/unhandledExceptionHookClosure.kt");
+        }
+
+        @Test
+        @TestMetadata("unhandledExceptionHookFun.kt")
+        public void testUnhandledExceptionHookFun() throws Exception {
+            runTest("native/native.tests/testData/standalone/termination/unhandledExceptionHookFun.kt");
+        }
+
+        @Test
+        @TestMetadata("unhandledExceptionHookGet.kt")
+        public void testUnhandledExceptionHookGet() throws Exception {
+            runTest("native/native.tests/testData/standalone/termination/unhandledExceptionHookGet.kt");
+        }
+
+        @Test
+        @TestMetadata("unhandledExceptionHookTerminate.kt")
+        public void testUnhandledExceptionHookTerminate() throws Exception {
+            runTest("native/native.tests/testData/standalone/termination/unhandledExceptionHookTerminate.kt");
+        }
+
+        @Test
+        @TestMetadata("unhandledExceptionHookTerminateWithProcess.kt")
+        public void testUnhandledExceptionHookTerminateWithProcess() throws Exception {
+            runTest("native/native.tests/testData/standalone/termination/unhandledExceptionHookTerminateWithProcess.kt");
+        }
+
+        @Test
+        @TestMetadata("unhandledExceptionHookThrow.kt")
+        public void testUnhandledExceptionHookThrow() throws Exception {
+            runTest("native/native.tests/testData/standalone/termination/unhandledExceptionHookThrow.kt");
+        }
+
+        @Test
+        @TestMetadata("unhandledExceptionHookWithProcess.kt")
+        public void testUnhandledExceptionHookWithProcess() throws Exception {
+            runTest("native/native.tests/testData/standalone/termination/unhandledExceptionHookWithProcess.kt");
         }
     }
 }
