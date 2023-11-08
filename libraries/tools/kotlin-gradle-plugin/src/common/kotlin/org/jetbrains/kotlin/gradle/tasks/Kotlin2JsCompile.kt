@@ -97,10 +97,6 @@ abstract class Kotlin2JsCompile @Inject constructor(
         }
     }
 
-    // Workaround to be able to use default value and change it later based on external input
-    @get:Internal
-    internal abstract val defaultDestinationDirectory: DirectoryProperty
-
     // Workaround to add additional compiler args based on the exising one
     // Currently there is a logic to add additional compiler arguments based on already existing one.
     // And it is not possible to update compilerOptions.freeCompilerArgs using some kind of .map
