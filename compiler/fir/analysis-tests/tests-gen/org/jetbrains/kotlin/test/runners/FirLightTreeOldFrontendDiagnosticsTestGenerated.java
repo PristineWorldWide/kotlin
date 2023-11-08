@@ -31199,6 +31199,12 @@ public class FirLightTreeOldFrontendDiagnosticsTestGenerated extends AbstractFir
             }
 
             @Test
+            @TestMetadata("genericInheritanceWithNonGenericNoAmbiguity.kt")
+            public void testGenericInheritanceWithNonGenericNoAmbiguity() throws Exception {
+                runTest("compiler/testData/diagnostics/tests/smartCasts/genericInheritanceWithNonGenericNoAmbiguity.kt");
+            }
+
+            @Test
             @TestMetadata("genericIntersection.kt")
             public void testGenericIntersection() throws Exception {
                 runTest("compiler/testData/diagnostics/tests/smartCasts/genericIntersection.kt");
