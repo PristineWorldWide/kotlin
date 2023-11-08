@@ -1,0 +1,15 @@
+apply from: "$rootDir/configure-targets.gradle"
+
+dependencies {
+    implementation project(":lib")
+}
+
+kotlin {
+    sourceSets {
+        val commonTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+            }
+        }
+    }
+}
