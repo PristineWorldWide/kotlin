@@ -212,15 +212,6 @@ private:
     ObjHeader* value_ = nullptr;
 };
 
-void beforeHeapRefStore(DirectRefAccessor ref, ObjHeader* value) noexcept;
-void afterHeapRefStore(DirectRefAccessor ref, ObjHeader* value) noexcept;
-void beforeStackRefStore(DirectRefAccessor ref, ObjHeader* value) noexcept;
-void afterStackRefStore(DirectRefAccessor ref, ObjHeader* value) noexcept;
-void beforeHeapRefLoad(DirectRefAccessor ref) noexcept;
-void afterHeapRefLoad(DirectRefAccessor ref) noexcept;
-void beforeStackRefLoad(DirectRefAccessor ref) noexcept;
-void afterStackRefLoad(DirectRefAccessor ref) noexcept;
-
 OBJ_GETTER(weakRefReadBarrier, std::atomic<ObjHeader*>& referee) noexcept;
 
 }
