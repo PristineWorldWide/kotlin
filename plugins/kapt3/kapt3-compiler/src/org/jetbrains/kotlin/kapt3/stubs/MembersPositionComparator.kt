@@ -51,4 +51,17 @@ class MembersPositionComparator(val classSource: KotlinPosition?, val memberData
         return m1.descriptor.compareTo(m2.descriptor)
     }
 }
-class MemberData(val name: String, val descriptor: String, val position: KotlinPosition?)
+class MemberData(val name: String, val descriptor: String, val position: KotlinPosition?): Comparable<MemberData> {
+    override fun compareTo(other: MemberData): Int {
+        if (position != null && other.position == null) return -1
+        if (position == null && other.position != null) return +1
+        if (position != null && other.position != null && position.path == other.position.path) {
+            val c = position.pos.compareTo(other.position.pos)
+            if (c != 0) return c
+        }
+        val c = name.compareTo(other.name)
+        if (c != 0) return c
+        return descriptor.compareTo(other.descriptor)
+    }
+
+}

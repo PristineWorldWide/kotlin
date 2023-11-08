@@ -176,7 +176,7 @@ internal fun KtType.isClassTypeWithClassId(classId: ClassId): Boolean {
     return this.classId == classId
 }
 
-private fun escapeString(s: String): String = buildString {
+fun escapeString(s: String): String = buildString {
     s.forEach {
         when (it) {
             '\n' -> append("\\n")

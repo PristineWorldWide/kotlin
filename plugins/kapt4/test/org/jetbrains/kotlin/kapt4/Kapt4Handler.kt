@@ -11,6 +11,7 @@ import com.sun.tools.javac.tree.JCTree
 import com.sun.tools.javac.util.JCDiagnostic
 import com.sun.tools.javac.util.List
 import com.sun.tools.javac.util.Log
+import org.jetbrains.kotlin.kapt3.base.KaptContext
 import org.jetbrains.kotlin.kapt3.base.javac.KaptJavaLogBase
 import org.jetbrains.kotlin.kapt3.base.parseJavaFiles
 import org.jetbrains.kotlin.kapt3.javac.KaptJavaFileObject
@@ -32,7 +33,6 @@ import org.jetbrains.kotlin.test.utils.withExtension
 import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstance
 import java.io.File
 import java.util.*
-import org.jetbrains.kotlin.kapt3.test.handlers.renderMetadata
 
 internal class Kapt4Handler(testServices: TestServices) : AnalysisHandler<Kapt4ContextBinaryArtifact>(
     testServices,
@@ -70,7 +70,7 @@ internal class Kapt4Handler(testServices: TestServices) : AnalysisHandler<Kapt4C
 
     private fun checkJavaCompilerErrors(
         module: TestModule,
-        kaptContext: Kapt4ContextForStubGeneration,
+        kaptContext: KaptContext,
         actualDump: String
     ) {
         val expectedErrors = (module.directives[EXPECTED_ERROR] + module.directives[Kapt4TestDirectives.EXPECTED_ERROR_K2]).sorted()
@@ -116,7 +116,7 @@ internal class Kapt4Handler(testServices: TestServices) : AnalysisHandler<Kapt4C
     ): List<JCTree.JCCompilationUnit> {
         val (kaptContext, kaptStubs) = info
         val convertedFiles = kaptStubs.mapIndexed { index, stub ->
-            val sourceFile = createTempJavaFile("stub$index.java", stub.file.prettyPrint(kaptContext.context, ::renderMetadata))
+            val sourceFile = createTempJavaFile("stub$index.java", stub.file)
             stub.writeMetadataIfNeeded(forSource = sourceFile)
             sourceFile
         }

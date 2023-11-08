@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 description = "Annotation Processor for Kotlin"
 
 plugins {
@@ -8,12 +6,12 @@ plugins {
 }
 
 dependencies {
+    implementation(project(mapOf("path" to ":analysis:analysis-internal-utils")))
     compileOnly(project(":compiler:frontend.java"))
     compileOnly(project(":compiler:plugin-api"))
     implementation(project(":kotlin-annotation-processing-compiler"))
     compileOnly(project(":kotlin-annotation-processing-base"))
     compileOnly(project(":analysis:analysis-api-standalone"))
-    compileOnly(toolsJarApi())
 
     embedded(project(":kotlin-annotation-processing-compiler")) { isTransitive = false }
 
@@ -77,12 +75,3 @@ publish()
 runtimeJar()
 sourcesJar()
 javadocJar()
-
-
-allprojects {
-    tasks.withType(KotlinCompile::class).all {
-        kotlinOptions {
-            freeCompilerArgs += "-Xcontext-receivers"
-        }
-    }
-}

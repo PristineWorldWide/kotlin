@@ -28,6 +28,12 @@
   <dependencies>
     <dependency>
       <groupId>org.jetbrains.kotlin</groupId>
+      <artifactId>analysis-internal-utils</artifactId>
+      <version>ArtifactsTest.version</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jetbrains.kotlin</groupId>
       <artifactId>kotlin-annotation-processing-compiler</artifactId>
       <version>ArtifactsTest.version</version>
       <scope>runtime</scope>
