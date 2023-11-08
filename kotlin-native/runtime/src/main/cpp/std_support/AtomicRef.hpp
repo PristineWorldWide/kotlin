@@ -10,6 +10,12 @@
 
 namespace kotlin::std_support {
 
+#pragma clang diagnostic push
+// On 32-bit android arm clang warns of significant performance penalty because of large atomic operations.
+// TODO: Consider using alternative ways of ordering memory operations
+//       if they turn out to be more efficient on these platforms.
+#pragma clang diagnostic ignored "-Watomic-alignment"
+
 template<typename T>
 class atomic_ref {
     // TODO current implementation supports only pointer or integral T
@@ -100,5 +106,7 @@ private:
 
     T& ref_;
 };
+
+#pragma clang diagnostic pop
 
 }

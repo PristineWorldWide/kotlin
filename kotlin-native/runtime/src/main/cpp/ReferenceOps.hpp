@@ -64,11 +64,6 @@ public:
 #endif
     }
 
-#pragma clang diagnostic push
-// On 32-bit android arm clang warns of significant performance penalty because of large atomic operations.
-// TODO: Consider using alternative ways of ordering memory operations
-//       if they turn out to be more efficient on these platforms.
-#pragma clang diagnostic ignored "-Watomic-alignment"
     ALWAYS_INLINE auto atomic() noexcept {
         return std_support::atomic_ref<ObjHeader*>{ref_};
     }
@@ -88,7 +83,6 @@ public:
     ALWAYS_INLINE bool compareAndExchange(ObjHeader*& expected, ObjHeader* desired, std::memory_order order) noexcept {
         return atomic().compare_exchange_strong(expected, desired, order);
     }
-#pragma clang diagnostic pop
 
 private:
     ObjHeader*& ref_;
