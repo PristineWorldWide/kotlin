@@ -134,4 +134,41 @@ public class NativeStandaloneTestGenerated extends AbstractNativeBlackBoxTest {
             runTest("native/native.tests/testData/standalone/entryPoint/mainOverloadingNoArgs.kt");
         }
     }
+
+    @Nested
+    @TestMetadata("native/native.tests/testData/standalone/termination")
+    @TestDataPath("$PROJECT_ROOT")
+    @Tag("standalone")
+    @EnforcedProperty(property = ClassLevelProperty.TEST_KIND, propertyValue = "STANDALONE_NO_TR")
+    @UseStandardTestCaseGroupProvider()
+    public class Termination {
+        @Test
+        public void testAllFilesPresentInTermination() throws Exception {
+            KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("native/native.tests/testData/standalone/termination"), Pattern.compile("^(.+)\\.kt$"), null, true);
+        }
+
+        @Test
+        @TestMetadata("assertFailed.kt")
+        public void testAssertFailed() throws Exception {
+            runTest("native/native.tests/testData/standalone/termination/assertFailed.kt");
+        }
+
+        @Test
+        @TestMetadata("assertPassed.kt")
+        public void testAssertPassed() throws Exception {
+            runTest("native/native.tests/testData/standalone/termination/assertPassed.kt");
+        }
+
+        @Test
+        @TestMetadata("exitProcess.kt")
+        public void testExitProcess() throws Exception {
+            runTest("native/native.tests/testData/standalone/termination/exitProcess.kt");
+        }
+
+        @Test
+        @TestMetadata("mainException.kt")
+        public void testMainException() throws Exception {
+            runTest("native/native.tests/testData/standalone/termination/mainException.kt");
+        }
+    }
 }

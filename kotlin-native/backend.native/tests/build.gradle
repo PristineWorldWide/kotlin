@@ -593,11 +593,6 @@ standaloneTest("runtime_basic_init") {
     expectedExitStatus = 0
 }
 
-standaloneTest("runtime_basic_exit") {
-    source = "runtime/basic/exit.kt"
-    expectedExitStatus = 42
-}
-
 tasks.register("codegen_vector_default_argument", KonanLocalTest) {
     source = "codegen/vector/default_argument.kt"
 }
@@ -2357,22 +2352,6 @@ tasks.register("main_exception", KonanLocalTest) {
     outputChecker = { s -> s.contains("kotlin.Error: Hello!") }
     expectedExitStatus = 1
     source = "runtime/basic/main_exception.kt"
-}
-
-standaloneTest("runtime_basic_assert_failed") {
-    expectedExitStatusChecker = { it != 0 }
-    source = "runtime/basic/assert_failed.kt"
-}
-
-standaloneTest("runtime_basic_assert_passed") {
-    expectedExitStatus = 0
-    source = "runtime/basic/assert_passed.kt"
-}
-
-standaloneTest("runtime_basic_assert_disabled") {
-    expectedExitStatus = 0
-    enableKonanAssertions = false
-    source = "runtime/basic/assert_failed.kt"
 }
 
 tasks.register("initializers0", KonanLocalTest) {
