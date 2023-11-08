@@ -41,8 +41,6 @@ import org.jetbrains.kotlin.gradle.targets.js.ir.PRODUCE_UNZIPPED_KLIB
 import org.jetbrains.kotlin.gradle.targets.js.ir.PRODUCE_ZIPPED_KLIB
 import org.jetbrains.kotlin.gradle.tasks.internal.KotlinJsOptionsCompat
 import org.jetbrains.kotlin.gradle.utils.getFile
-import org.jetbrains.kotlin.gradle.utils.existsCompat
-import org.jetbrains.kotlin.gradle.utils.isParentOf
 import org.jetbrains.kotlin.gradle.utils.newInstance
 import org.jetbrains.kotlin.gradle.utils.toPathsArray
 import org.jetbrains.kotlin.incremental.ClasspathChanges
@@ -103,10 +101,6 @@ abstract class Kotlin2JsCompile @Inject constructor(
     @get:Internal
     internal abstract val defaultDestinationDirectory: DirectoryProperty
 
-    @Deprecated("Use destinationDirectory and moduleName instead")
-    @get:Internal
-    abstract val outputFileProperty: Property<File>
-
     // Workaround to add additional compiler args based on the exising one
     // Currently there is a logic to add additional compiler arguments based on already existing one.
     // And it is not possible to update compilerOptions.freeCompilerArgs using some kind of .map
@@ -148,19 +142,8 @@ abstract class Kotlin2JsCompile @Inject constructor(
 
             KotlinJsCompilerOptionsHelper.fillCompilerArguments(compilerOptions, args)
 
-            if (isIrBackendEnabled()) {
-                val outputFilePath: String? = compilerOptions.outputFile.orNull
-                if (outputFilePath != null) {
-                    val outputFile = File(outputFilePath)
-                    args.outputDir = (if (outputFile.extension == "") outputFile else outputFile.parentFile).normalize().absolutePath
-                    args.moduleName = outputFile.nameWithoutExtension
-                } else {
-                    args.outputDir = destinationDirectory.get().asFile.normalize().absolutePath
-                    args.moduleName = compilerOptions.moduleName.get()
-                }
-            } else {
-                args.outputFile = outputFileProperty.get().absoluteFile.normalize().absolutePath
-            }
+            args.outputDir = destinationDirectory.get().asFile.normalize().absolutePath
+            args.moduleName = compilerOptions.moduleName.get()
 
             if (compilerOptions.usesK2.get()) {
                 args.fragments = multiplatformStructure.fragmentsCompilerArgs
@@ -292,11 +275,9 @@ abstract class Kotlin2JsCompile @Inject constructor(
     override fun callCompilerAsync(
         args: K2JSCompilerArguments,
         inputChanges: InputChanges,
-        taskOutputsBackup: TaskOutputsBackup?
+        taskOutputsBackup: TaskOutputsBackup?,
     ) {
         logger.debug("Calling compiler")
-
-        validateOutputDirectory()
 
         if (isIrBackendEnabled()) {
             logger.info(USING_JS_IR_BACKEND_MESSAGE)
@@ -353,18 +334,4 @@ abstract class Kotlin2JsCompile @Inject constructor(
     }
 
     private val rootProjectDir = project.rootDir
-
-    private fun validateOutputDirectory() {
-        val outputFile = outputFileProperty.get()
-        val outputDir = outputFile.parentFile
-
-        if (outputDir.isParentOf(rootProjectDir)) {
-            throw InvalidUserDataException(
-                "The output directory '$outputDir' (defined by outputFile of ':$name') contains or " +
-                        "matches the project root directory '${rootProjectDir}'.\n" +
-                        "Gradle will not be able to build the project because of the root directory lock.\n" +
-                        "To fix this, consider using the default outputFile location instead of providing it explicitly."
-            )
-        }
-    }
 }

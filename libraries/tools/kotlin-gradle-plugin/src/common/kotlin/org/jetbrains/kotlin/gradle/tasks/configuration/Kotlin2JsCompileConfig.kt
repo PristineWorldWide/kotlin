@@ -51,19 +51,6 @@ internal open class BaseKotlin2JsCompileConfig<TASK : Kotlin2JsCompile>(
                 task.moduleName.set(task.compilerOptions.moduleName)
             }
 
-            @Suppress("DEPRECATION")
-            task.outputFileProperty.value(
-                task.destinationDirectory.flatMap { dir ->
-                    if (task.compilerOptions.outputFile.orNull != null) {
-                        task.compilerOptions.outputFile.map { File(it) }
-                    } else {
-                        task.compilerOptions.moduleName.map { name ->
-                            dir.file(name + compilation.platformType.fileExtension).asFile
-                        }
-                    }
-                }
-            )
-
             task.destinationDirectory
                 .convention(
                     project.objects.directoryProperty().fileProvider(
