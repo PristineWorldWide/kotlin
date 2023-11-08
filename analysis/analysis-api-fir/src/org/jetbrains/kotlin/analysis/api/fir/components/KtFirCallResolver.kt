@@ -124,8 +124,8 @@ internal class KtFirCallResolver(
         getCallInfo: FirElement.(
             psiToResolve: KtElement,
             resolveCalleeExpressionOfFunctionCall: Boolean,
-            resolveFragmentOfCall: Boolean,
-        ) -> List<T>,
+            resolveFragmentOfCall: Boolean
+        ) -> List<T>
     ): List<T> {
         if (!canBeResolvedAsCall(psi)) return emptyList()
 
@@ -362,7 +362,7 @@ internal class KtFirCallResolver(
         psi: KtElement,
         fir: FirResolvable,
         candidate: AbstractCandidate?,
-        resolveFragmentOfCall: Boolean,
+        resolveFragmentOfCall: Boolean
     ): KtCall? {
         return createKtCall(psi, fir, fir.calleeReference, candidate, resolveFragmentOfCall)
     }
@@ -372,7 +372,7 @@ internal class KtFirCallResolver(
         fir: FirElement,
         calleeReference: FirReference,
         candidate: AbstractCandidate?,
-        resolveFragmentOfCall: Boolean,
+        resolveFragmentOfCall: Boolean
     ): KtCall? {
         val targetSymbol = candidate?.symbol
             ?: calleeReference.toResolvedBaseSymbol()
@@ -398,7 +398,7 @@ internal class KtFirCallResolver(
         fun createKtPartiallyAppliedSymbolForImplicitInvoke(
             dispatchReceiver: FirExpression?,
             extensionReceiver: FirExpression?,
-            explicitReceiverKind: ExplicitReceiverKind,
+            explicitReceiverKind: ExplicitReceiverKind
         ): KtPartiallyAppliedSymbol<KtCallableSymbol, KtCallableSignature<KtCallableSymbol>> {
             isImplicitInvoke = true
 
