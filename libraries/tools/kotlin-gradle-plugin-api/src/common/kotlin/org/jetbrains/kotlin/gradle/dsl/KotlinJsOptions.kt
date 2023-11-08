@@ -67,15 +67,6 @@ interface KotlinJsOptions : org.jetbrains.kotlin.gradle.dsl.KotlinCommonOptions 
         set(value) = options.noStdlib.set(value)
 
     /**
-     * Destination *.js file for the compilation result
-     * Default value: null
-     */
-    @Deprecated(message = "Only for legacy backend. For IR backend please use task.destinationDirectory and moduleName", level = DeprecationLevel.WARNING)
-    var outputFile: kotlin.String?
-        get() = options.outputFile.orNull
-        set(value) = options.outputFile.set(value)
-
-    /**
      * Generate source map
      * Default value: false
      */

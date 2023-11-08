@@ -181,10 +181,10 @@ private fun readV2AndLaterConfig(
         }
         productionOutputPath = element.getChild("productionOutputPath")?.let {
             (it.content.firstOrNull() as? Text)?.textTrim?.let(FileUtilRt::toSystemDependentName)
-        } ?: (compilerArguments as? K2JSCompilerArguments)?.outputFile
+        } ?: (compilerArguments as? K2JSCompilerArguments)?.outputDir
         testOutputPath = element.getChild("testOutputPath")?.let {
             (it.content.firstOrNull() as? Text)?.textTrim?.let(FileUtilRt::toSystemDependentName)
-        } ?: (compilerArguments as? K2JSCompilerArguments)?.outputFile
+        } ?: (compilerArguments as? K2JSCompilerArguments)?.outputDir
     }
 }
 
@@ -239,7 +239,7 @@ fun CommonCompilerArguments.convertPathsToSystemIndependent() {
         }
 
         is K2JSCompilerArguments -> {
-            outputFile = outputFile?.let(FileUtilRt::toSystemIndependentName)
+            outputDir = outputDir?.let(FileUtilRt::toSystemIndependentName)
             libraries = libraries?.let(FileUtilRt::toSystemIndependentName)
         }
 
@@ -355,12 +355,12 @@ private fun KotlinFacetSettings.writeConfig(element: Element) {
         element.setAttribute("pureKotlinSourceFolders", pureKotlinSourceFolders.joinToString(";"))
     }
     productionOutputPath?.let {
-        if (it != (compilerArguments as? K2JSCompilerArguments)?.outputFile) {
+        if (it != (compilerArguments as? K2JSCompilerArguments)?.outputDir) {
             element.addContent(Element("productionOutputPath").apply { addContent(FileUtilRt.toSystemIndependentName(it)) })
         }
     }
     testOutputPath?.let {
-        if (it != (compilerArguments as? K2JSCompilerArguments)?.outputFile) {
+        if (it != (compilerArguments as? K2JSCompilerArguments)?.outputDir) {
             element.addContent(Element("testOutputPath").apply { addContent(FileUtilRt.toSystemIndependentName(it)) })
         }
     }

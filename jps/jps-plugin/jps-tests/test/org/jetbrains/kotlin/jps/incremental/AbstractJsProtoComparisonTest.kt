@@ -47,7 +47,8 @@ abstract class AbstractJsProtoComparisonTest : AbstractProtoComparisonTest<Proto
         val messageCollector = TestMessageCollector()
         val outputItemsCollector = OutputItemsCollectorImpl()
         val args = K2JSCompilerArguments().apply {
-            outputFile = File(outputDir, "out.js").canonicalPath
+            this.outputDir = outputDir.normalize().absolutePath
+            moduleName = "out"
             metaInfo = true
             main = K2JsArgumentConstants.NO_CALL
             freeArgs = ktFiles

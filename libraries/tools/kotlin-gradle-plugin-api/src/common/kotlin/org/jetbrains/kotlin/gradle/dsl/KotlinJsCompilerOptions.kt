@@ -53,14 +53,6 @@ interface KotlinJsCompilerOptions : org.jetbrains.kotlin.gradle.dsl.KotlinCommon
     val noStdlib: org.gradle.api.provider.Property<kotlin.Boolean>
 
     /**
-     * Destination *.js file for the compilation result
-     * Default value: null
-     */
-    @Deprecated(message = "Only for legacy backend. For IR backend please use task.destinationDirectory and moduleName", level = DeprecationLevel.WARNING)
-    @get:org.gradle.api.tasks.Internal
-    val outputFile: org.gradle.api.provider.Property<kotlin.String>
-
-    /**
      * Generate source map
      * Default value: false
      */

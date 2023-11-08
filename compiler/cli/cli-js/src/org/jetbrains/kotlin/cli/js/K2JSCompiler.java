@@ -222,11 +222,6 @@ public class K2JSCompiler extends CLICompiler<K2JSCompilerArguments> {
 
         if (!HelpersKt.checkKotlinPackageUsageForPsi(environmentForJS.getConfiguration(), sourcesFiles)) return ExitCode.COMPILATION_ERROR;
 
-        if (arguments.getOutputFile() == null) {
-            messageCollector.report(ERROR, "Specify output file via -output", null);
-            return ExitCode.COMPILATION_ERROR;
-        }
-
         if (messageCollector.hasErrors()) {
             return ExitCode.COMPILATION_ERROR;
         }
@@ -240,7 +235,7 @@ public class K2JSCompiler extends CLICompiler<K2JSCompilerArguments> {
             reportCompiledSourcesList(messageCollector, sourcesFiles);
         }
 
-        File outputFile = new File(arguments.getOutputFile());
+        File outputFile = new File((String)null);
 
         configuration.put(CommonConfigurationKeys.MODULE_NAME, FileUtil.getNameWithoutExtension(outputFile));
 

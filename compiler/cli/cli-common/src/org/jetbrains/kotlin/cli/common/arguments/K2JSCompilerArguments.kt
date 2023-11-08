@@ -16,23 +16,6 @@ class K2JSCompilerArguments : CommonCompilerArguments() {
         @JvmStatic private val serialVersionUID = 0L
     }
 
-    @GradleOption(
-        value = DefaultValue.STRING_NULL_DEFAULT,
-        gradleInputType = GradleInputTypes.INTERNAL, // handled by task 'outputFileProperty'
-        shouldGenerateDeprecatedKotlinOptions = true,
-    )
-    @GradleDeprecatedOption(
-        message = "Only for legacy backend. For IR backend please use task.destinationDirectory and moduleName",
-        level = DeprecationLevel.WARNING,
-        removeAfter = "1.9.0"
-    )
-    @Argument(value = "-output", valueDescription = "<filepath>", description = "Destination *.js file for the compilation result")
-    var outputFile: String? = null
-        set(value) {
-            checkFrozen()
-            field = if (value.isNullOrEmpty()) null else value
-        }
-
     @Argument(value = "-ir-output-dir", valueDescription = "<directory>", description = "Destination for generated files")
     var outputDir: String? = null
         set(value) {

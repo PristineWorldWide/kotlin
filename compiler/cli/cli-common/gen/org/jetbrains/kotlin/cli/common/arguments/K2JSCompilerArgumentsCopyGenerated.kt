@@ -52,7 +52,6 @@ fun copyK2JSCompilerArguments(from: K2JSCompilerArguments, to: K2JSCompilerArgum
     to.noStdlib = from.noStdlib
     to.optimizeGeneratedJs = from.optimizeGeneratedJs
     to.outputDir = from.outputDir
-    to.outputFile = from.outputFile
     to.outputPostfix = from.outputPostfix
     to.outputPrefix = from.outputPrefix
     to.partialLinkageLogLevel = from.partialLinkageLogLevel

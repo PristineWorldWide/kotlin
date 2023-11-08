@@ -157,7 +157,8 @@ abstract class AbstractJsLookupTrackerTest : AbstractLookupTrackerTest() {
         get() = PathUtil.kotlinPathsForDistDirectoryForTests.jsStdLibKlibPath
 
     protected open fun configureAdditionalArgs(args: K2JSCompilerArguments) {
-        args.outputFile = File(outDir, "out.js").canonicalPath
+        args.outputDir = outDir.normalize().absolutePath
+        args.moduleName = "out"
     }
 
     override fun runCompiler(filesToCompile: Iterable<File>, env: JpsCompilerEnvironment): Any? {
