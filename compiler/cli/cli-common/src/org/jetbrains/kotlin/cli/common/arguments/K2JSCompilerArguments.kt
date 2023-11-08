@@ -251,7 +251,7 @@ In combination with '-meta-info', this generates both IR and pre-IR versions of 
 
     @Argument(
         value = "-Xir-produce-klib-file",
-        description = "Generate a packed klib into the file specified by -output. This disables the pre-IR backend."
+        description = "Generate a packed klib into the file specified by '-output'. This disables the pre-IR backend."
     )
     var irProduceKlibFile = false
         set(value) {

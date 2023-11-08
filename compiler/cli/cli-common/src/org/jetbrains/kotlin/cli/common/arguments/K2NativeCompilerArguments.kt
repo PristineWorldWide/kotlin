@@ -134,7 +134,7 @@ class K2NativeCompilerArguments : CommonCompilerArguments() {
     @Argument(
         value = "-Xbundle-id",
         valueDescription = "<id>",
-        description = "Bundle ID to be set in the Info.plist file of a produced framework. This option is deprecated. Please use '-Xbinary=bundleId=<id>'."
+        description = "Bundle ID to be set in the Info.plist file of the produced framework. This option is deprecated. Please use '-Xbinary=bundleId=<id>'."
     )
     var bundleId: String? = null
 
@@ -256,7 +256,7 @@ Currently this option is disabled by default on other platforms."""
     )
     var filesToCache: Array<String>? = null
 
-    @Argument(value = "-Xmake-per-file-cache", description = "Force the compiler to produce one cache per file.")
+    @Argument(value = "-Xmake-per-file-cache", description = "Force the compiler to produce per-file caches.")
     var makePerFileCache: Boolean = false
 
     @Argument(
@@ -274,7 +274,7 @@ The default value is 1."""
     @Argument(value = "-Xprint-bitcode", deprecatedName = "--print_bitcode", description = "Print LLVM bitcode.")
     var printBitCode: Boolean = false
 
-    @Argument(value = "-Xcheck-state-at-external-calls", description = "Ensure that all calls of possibly long external functions are done in the native state.")
+    @Argument(value = "-Xcheck-state-at-external-calls", description = "Ensure that all calls of possibly long external functions are done in the native thread state.")
     var checkExternalCalls: Boolean = false
 
     @Argument(value = "-Xprint-ir", deprecatedName = "--print_ir", description = "Print IR.")
@@ -342,7 +342,7 @@ The default value is 1."""
     )
     var refinesPaths: Array<String>? = null
 
-    @Argument(value = "-Xdebug-info-version", description = "Generate debug info of given version (1, 2).")
+    @Argument(value = "-Xdebug-info-version", description = "Generate debug info of the given version (1, 2).")
     var debugInfoFormatVersion: String = "1" /* command line parser doesn't accept kotlin.Int type */
 
     @Argument(value = "-Xcoverage", description = "Emit coverage.")
@@ -426,7 +426,7 @@ The library must be one of the ones passed with '-library'.""",
     )
     var binaryOptions: Array<String>? = null
 
-    @Argument(value = "-Xruntime-logs", valueDescription = "<tag1=level1,tag2=level2,...>", description = "Enable runtime logging with tags.")
+    @Argument(value = "-Xruntime-logs", valueDescription = "<tag1=level1,tag2=level2,...>", description = "Enable logging of Native runtime internals.")
     var runtimeLogs: String? = null
 
     @Argument(

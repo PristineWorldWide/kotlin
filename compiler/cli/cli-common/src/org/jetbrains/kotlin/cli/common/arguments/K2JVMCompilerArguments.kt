@@ -34,7 +34,7 @@ class K2JVMCompilerArguments : CommonCompilerArguments() {
             field = if (value.isNullOrEmpty()) null else value
         }
 
-    @Argument(value = "-include-runtime", description = "Include Kotlin runtime in the resulting JAR.")
+    @Argument(value = "-include-runtime", description = "Include the Kotlin runtime in the resulting JAR.")
     var includeRuntime = false
         set(value) {
             checkFrozen()
@@ -74,7 +74,7 @@ class K2JVMCompilerArguments : CommonCompilerArguments() {
             field = value
         }
 
-    @Argument(value = "-no-reflect", description = "Don't automatically include a Kotlin reflection dependency in the classpath.")
+    @Argument(value = "-no-reflect", description = "Don't automatically include the Kotlin reflection dependency in the classpath.")
     var noReflect = false
         set(value) {
             checkFrozen()
@@ -256,7 +256,7 @@ The default value is 1."""
 -Xassertions=always-enable:  enable, ignore JVM assertion settings;
 -Xassertions=always-disable: disable, ignore JVM assertion settings;
 -Xassertions=jvm:            enable, depend on JVM assertion settings;
--Xassertions=legacy:         calculate condition on each call, the behavior depends on JVM assertion settings in the kotlin package;
+-Xassertions=legacy:         calculate the condition on each call, the behavior depends on JVM assertion settings in the kotlin package;
 default: legacy"""
     )
     var assertionsMode: String? = JVMAssertionsMode.DEFAULT.description
@@ -556,7 +556,7 @@ problems with parentheses in identifiers on certain platforms."""
     @Argument(
         value = "-Xstring-concat",
         valueDescription = "{indy-with-constants|indy|inline}",
-        description = """Select code generation scheme for string concatenation:
+        description = """Select the code generation scheme for string concatenation:
 -Xstring-concat=indy-with-constants  Concatenate strings using 'invokedynamic' and 'makeConcatWithConstants'. This requires '-jvm-target 9' or greater.
 -Xstring-concat=indy                 Concatenate strings using 'invokedynamic' and 'makeConcat'. This requires '-jvm-target 9' or greater.
 -Xstring-concat=inline               Concatenate strings using 'StringBuilder'
@@ -586,7 +586,7 @@ This also sets the value of '-jvm-target' to be equal to the selected JDK versio
     @Argument(
         value = "-Xsam-conversions",
         valueDescription = "{class|indy}",
-        description = """Select code generation scheme for SAM conversions.
+        description = """Select the code generation scheme for SAM conversions.
 -Xsam-conversions=indy          Generate SAM conversions using 'invokedynamic' with 'LambdaMetafactory.metafactory'. Requires '-jvm-target 1.8' or greater.
 -Xsam-conversions=class         Generate SAM conversions as explicit classes"""
     )

@@ -162,7 +162,7 @@ Code written in progressive mode is backward compatible; however, code written w
             field = value
         }
 
-    @Argument(value = "-Xreport-output-files", description = "Report source-to-output file mapping.")
+    @Argument(value = "-Xreport-output-files", description = "Report the source-to-output file mapping.")
     var reportOutputFiles = false
         set(value) {
             checkFrozen()
@@ -212,7 +212,7 @@ Code written in progressive mode is backward compatible; however, code written w
     @Argument(
         value = "-Xintellij-plugin-root",
         valueDescription = "<path>",
-        description = "Path to 'kotlin-compiler.jar' or the directory where IntelliJ IDEA configuration files can be found."
+        description = "Path to 'kotlin-compiler.jar' or the directory where the IntelliJ IDEA configuration files can be found."
     )
     var intellijPluginRoot: String? = null
         set(value) {
@@ -522,7 +522,7 @@ Code written in progressive mode is backward compatible; however, code written w
 
     @Argument(
         value = "-Xuse-fir-ic",
-        description = "Compile using frontend IR internal incremental compilation cycle.\nWarning: This feature is not yet production-ready."
+        description = "Compile using the frontend IR internal incremental compilation cycle.\nWarning: This feature is not yet production-ready."
     )
     var useFirIC = false
         set(value) {
@@ -591,7 +591,7 @@ Code written in progressive mode is backward compatible; however, code written w
     @Argument(
         value = "-Xexplicit-api",
         valueDescription = "{strict|warning|disable}",
-        description = """Force the compiler to report errors on all public API declarations without explicit visibility or return type.
+        description = """Force the compiler to report errors on all public API declarations without an explicit visibility or a return type.
 Use the 'warning' level to issue warnings instead of errors."""
     )
     var explicitApi: String = ExplicitApiMode.DISABLED.state
