@@ -8,7 +8,6 @@ where possible options include:
   -ir-output-name            Base name of generated files
   -no-stdlib                 Don't automatically include the default Kotlin/JS stdlib into compilation dependencies
   -ir-output-dir <directory> Destination for generated files
-  -output <filepath>         Destination *.js file for the compilation result
   -output-postfix <path>     Add the content of the specified file to the end of output file
   -output-prefix <path>      Add the content of the specified file to the beginning of output file
   -source-map                Generate source map

@@ -624,16 +624,6 @@ class K2JSCompilerArguments : CommonCompilerArguments() {
         }
 
     @Argument(
-        value = "-Xforce-deprecated-legacy-compiler-usage",
-        description = "The flag is used only for our inner infrastructure. It will be removed soon, so it's unsafe to use it nowadays."
-    )
-    var forceDeprecatedLegacyCompilerUsage = false
-        set(value) {
-            checkFrozen()
-            field = value
-        }
-
-    @Argument(
         value = "-Xoptimize-generated-js",
         description = "Perform additional optimizations on the generated JS code"
     )

@@ -15,7 +15,6 @@ fun copyK2JSCompilerArguments(from: K2JSCompilerArguments, to: K2JSCompilerArgum
     to.errorTolerancePolicy = from.errorTolerancePolicy
     to.extensionFunctionsInExternals = from.extensionFunctionsInExternals
     to.fakeOverrideValidator = from.fakeOverrideValidator
-    to.forceDeprecatedLegacyCompilerUsage = from.forceDeprecatedLegacyCompilerUsage
     to.friendModules = from.friendModules
     to.friendModulesDisabled = from.friendModulesDisabled
     to.generateDts = from.generateDts

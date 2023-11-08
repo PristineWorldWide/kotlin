@@ -6,8 +6,6 @@ where advanced options include:
   -Xenable-extension-functions-in-externals
                              Enable extensions functions members in external interfaces
   -Xfake-override-validator  Enable IR fake override validator
-  -Xforce-deprecated-legacy-compiler-usage
-                             The flag is used only for our inner infrastructure. It will be removed soon, so it's unsafe to use it nowadays.
   -Xfriend-modules=<path>    Paths to friend modules
   -Xfriend-modules-disabled  Disable internal declaration export
   -Xgenerate-dts             Generate TypeScript declarations .d.ts file alongside JS file. Available in IR backend only.
