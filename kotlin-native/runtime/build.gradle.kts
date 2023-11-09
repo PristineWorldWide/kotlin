@@ -574,9 +574,6 @@ konanArtifacts {
         configure {
             dependsOn(":kotlin-native:distCompiler")
             dependsOn(":prepare:build.version:writeStdlibVersion")
-            // Kotlin version is necessary here as an input property.
-            // It is written as a compiler_version to the manifest by the compiler.
-            inputs.property("version", kotlinVersion)
         }
     }
 }
