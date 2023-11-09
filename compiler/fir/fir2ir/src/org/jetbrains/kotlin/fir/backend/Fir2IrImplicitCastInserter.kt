@@ -241,14 +241,10 @@ class Fir2IrImplicitCastInserter(
         if (argumentType !is ConeIntersectionType) return this
         val approximatedArgumentType = argumentType.approximateForIrOrNull() ?: argumentType
         if (approximatedArgumentType.isSubtypeOf(expectedType, session)) return this
-        if (!argumentType.isSubtypeOf(expectedType, session)) {
-            // If an argument type may be not a subtype of the expected type only in one situation: when
-            //   there was some functional/SAM conversion
-            // In this case, there is no need to insert cast from the smartcast type, because the conversion will be
-            //  processed later
-            return this
-        }
-        return implicitCast(this, expectedType.toIrType())
+
+        return findComponentOfIntersectionForExpectedType(argumentType, expectedType)?.let {
+            implicitCast(this, it.toIrType())
+        } ?: this
     }
 
     private fun ConeKotlinType.acceptsNullValues(): Boolean {
@@ -350,9 +346,15 @@ class Fir2IrImplicitCastInserter(
             }
         }
 
-        for (componentType in receiverExpressionType.intersectedTypes) {
-            if (AbstractTypeChecker.isSubtypeOf(session.typeContext, componentType, receiverType)) {
-                return implicitCastOrExpression(originalIrReceiver, componentType, typeOrigin)
+        return findComponentOfIntersectionForExpectedType(receiverExpressionType, receiverType)?.let {
+            implicitCastOrExpression(originalIrReceiver, it, typeOrigin)
+        }
+    }
+
+    private fun findComponentOfIntersectionForExpectedType(type: ConeIntersectionType, expectedType: ConeKotlinType): ConeKotlinType? {
+        for (componentType in type.intersectedTypes) {
+            if (AbstractTypeChecker.isSubtypeOf(session.typeContext, componentType, expectedType)) {
+                return componentType
             }
         }
         return null

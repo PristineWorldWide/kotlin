@@ -125,8 +125,7 @@ FILE fqName:<root> fileName:/samConversionsWithSmartCasts.kt
           GET_VAR 'a: kotlin.Function1<kotlin.Int, kotlin.Int> declared in <root>.test7' type=kotlin.Function1<kotlin.Int, kotlin.Int> origin=null
       CALL 'public final fun run1 (r: <root>.KRunnable): kotlin.Unit declared in <root>' type=kotlin.Unit origin=null
         r: TYPE_OP type=<root>.KRunnable origin=SAM_CONVERSION typeOperand=<root>.KRunnable
-          TYPE_OP type=kotlin.Function<kotlin.Any> origin=IMPLICIT_CAST typeOperand=kotlin.Function<kotlin.Any>
-            GET_VAR 'a: kotlin.Function1<kotlin.Int, kotlin.Int> declared in <root>.test7' type=kotlin.Function1<kotlin.Int, kotlin.Int> origin=null
+          GET_VAR 'a: kotlin.Function1<kotlin.Int, kotlin.Int> declared in <root>.test7' type=kotlin.Function1<kotlin.Int, kotlin.Int> origin=null
   FUN name:test7a visibility:public modality:FINAL <T> (a:T of <root>.test7a) returnType:kotlin.Unit
     TYPE_PARAMETER name:T index:0 variance: superTypes:[kotlin.Function1<kotlin.Int, kotlin.Int>] reified:false
     VALUE_PARAMETER name:a index:0 type:T of <root>.test7a
@@ -136,8 +135,7 @@ FILE fqName:<root> fileName:/samConversionsWithSmartCasts.kt
           GET_VAR 'a: T of <root>.test7a declared in <root>.test7a' type=T of <root>.test7a origin=null
       CALL 'public final fun run1 (r: <root>.KRunnable): kotlin.Unit declared in <root>' type=kotlin.Unit origin=null
         r: TYPE_OP type=<root>.KRunnable origin=SAM_CONVERSION typeOperand=<root>.KRunnable
-          TYPE_OP type=kotlin.Function<kotlin.Any> origin=IMPLICIT_CAST typeOperand=kotlin.Function<kotlin.Any>
-            GET_VAR 'a: T of <root>.test7a declared in <root>.test7a' type=T of <root>.test7a origin=null
+          GET_VAR 'a: T of <root>.test7a declared in <root>.test7a' type=T of <root>.test7a origin=null
   FUN name:test7b visibility:public modality:FINAL <T> (a:T of <root>.test7b) returnType:kotlin.Unit
     TYPE_PARAMETER name:T index:0 variance: superTypes:[kotlin.Function1<kotlin.Int, kotlin.Unit>; kotlin.Function0<kotlin.Unit>] reified:false
     VALUE_PARAMETER name:a index:0 type:T of <root>.test7b
