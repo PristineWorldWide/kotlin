@@ -15,8 +15,6 @@ import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.descriptors.impl.PropertyDescriptorImpl
 import org.jetbrains.kotlin.descriptors.impl.SimpleFunctionDescriptorImpl
 import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.name.ClassId
-import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
@@ -28,7 +26,6 @@ import org.jetbrains.kotlin.resolve.BindingTraceContext
 import org.jetbrains.kotlin.resolve.DescriptorResolver
 import org.jetbrains.kotlin.resolve.TypeResolver
 import org.jetbrains.kotlin.resolve.deprecation.DeprecationResolver
-import org.jetbrains.kotlin.resolve.descriptorUtil.module
 import org.jetbrains.kotlin.resolve.lazy.FileScopeProvider
 import org.jetbrains.kotlin.resolve.lazy.KotlinCodeAnalyzer
 import org.jetbrains.kotlin.resolve.scopes.LexicalScope
@@ -448,7 +445,7 @@ internal fun createNamerConfiguration(configuration: ObjCExportLazy.Configuratio
         override val topLevelNamePrefix = abbreviate(configuration.frameworkName)
 
         override fun getAdditionalPrefix(module: ModuleDescriptor): String? {
-            if (module.isStdlib()) return "Kotlin"
+            if (module.isNativeStdlib()) return "Kotlin"
 
             // Note: incorrect for compiler since it doesn't store ModuleInfo to ModuleDescriptor.
             val moduleInfo = module.getCapability(ModuleInfo.Capability) ?: return null
@@ -462,16 +459,6 @@ internal fun createNamerConfiguration(configuration: ObjCExportLazy.Configuratio
         override val ignoreInterfaceMethodCollisions: Boolean = configuration.ignoreInterfaceMethodCollisions
     }
 }
-
-// TODO: find proper solution.
-private fun ModuleDescriptor.isStdlib(): Boolean =
-        this.builtIns == this || this.isCommonStdlib() || this.isNativeStdlib()
-
-private val kotlinSequenceClassId = ClassId.topLevel(FqName("kotlin.sequences.Sequence"))
-
-private fun ModuleDescriptor.isCommonStdlib() =
-        this.findClassAcrossModuleDependencies(kotlinSequenceClassId)?.module == this
-
 
 private val KtModifierListOwner.isPublic: Boolean
     get() = this.visibilityModifierTypeOrDefault() == KtTokens.PUBLIC_KEYWORD
