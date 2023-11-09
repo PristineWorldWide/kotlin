@@ -1,7 +1,11 @@
-apply from: "$rootDir/configure-targets.gradle"
+plugins {
+    kotlin("multiplatform")
+}
 
-dependencies {
-    implementation project(":lib")
+kotlin {
+    jvm()
+    js()
+    <SingleNativeTarget>("native")
 }
 
 kotlin {

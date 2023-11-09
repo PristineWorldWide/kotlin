@@ -4,7 +4,7 @@ import kotlin.test.assertEquals
 class AdvancedTest {
 
     @Test
-    fun iosUtilReturns800() {
-        assertEquals(800, libIosPlatformUtil())
+    fun nativeUtilReturns800() {
+        assertEquals(800, libNativePlatformUtil())
     }
 }

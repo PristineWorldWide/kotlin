@@ -1,3 +1,3 @@
-class PlainPublicClassIos {
+class PlainPublicClassNative {
     fun queueSomething() = Unit
 }
