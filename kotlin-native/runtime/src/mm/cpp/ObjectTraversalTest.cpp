@@ -38,6 +38,10 @@ struct Payload {
 
 using ProcessFunMock = testing::StrictMock<testing::MockFunction<void(mm::RefFieldAccessor)>>;
 
+MATCHER_P(SameAccessor, accessor, "") {
+    return arg.direct().location() == accessor.direct().location();
+}
+
 } // namespace
 
 TEST(ObjectTraversalTest, TraverseFieldsExceptions) {
@@ -74,9 +78,9 @@ TEST(ObjectTraversalTest, TraverseObjectFields) {
     object->field3.direct() = &field3;
     ProcessFunMock process;
 
-    EXPECT_CALL(process, Call(object->field1.accessor()));
-    EXPECT_CALL(process, Call(object->field2.accessor()));
-    EXPECT_CALL(process, Call(object->field3.accessor()));
+    EXPECT_CALL(process, Call(SameAccessor(object->field1.accessor())));
+    EXPECT_CALL(process, Call(SameAccessor(object->field2.accessor())));
+    EXPECT_CALL(process, Call(SameAccessor(object->field3.accessor())));
     traverseObjectFields(object.header(), process.AsStdFunction());
 }
 
@@ -93,9 +97,9 @@ TEST(ObjectTraversalTest, TraverseObjectFieldsWithException) {
     object->field3.direct() = &field3;
     ProcessFunMock process;
 
-    EXPECT_CALL(process, Call(object->field1.accessor()));
-    EXPECT_CALL(process, Call(object->field2.accessor())).WillOnce([]() { throw kException; });
-    EXPECT_CALL(process, Call(object->field3.accessor())).Times(0);
+    EXPECT_CALL(process, Call(SameAccessor(object->field1.accessor())));
+    EXPECT_CALL(process, Call(SameAccessor(object->field2.accessor()))).WillOnce([]() { throw kException; });
+    EXPECT_CALL(process, Call(SameAccessor(object->field3.accessor()))).Times(0);
     try {
         traverseObjectFields(object.header(), process.AsStdFunction());
     } catch (int exception) {
@@ -121,9 +125,9 @@ TEST(ObjectTraversalTest, TraverseArrayFields) {
     array.elements()[2].direct() = &element3;
     ProcessFunMock process;
 
-    EXPECT_CALL(process, Call(array.elements()[0].accessor()));
-    EXPECT_CALL(process, Call(array.elements()[1].accessor()));
-    EXPECT_CALL(process, Call(array.elements()[2].accessor()));
+    EXPECT_CALL(process, Call(SameAccessor(array.elements()[0].accessor())));
+    EXPECT_CALL(process, Call(SameAccessor(array.elements()[1].accessor())));
+    EXPECT_CALL(process, Call(SameAccessor(array.elements()[2].accessor())));
     traverseObjectFields(array.header(), process.AsStdFunction());
 }
 
@@ -139,9 +143,9 @@ TEST(ObjectTraversalTest, TraverseArrayFieldsWithException) {
     array.elements()[2].direct() = &element3;
     ProcessFunMock process;
 
-    EXPECT_CALL(process, Call(array.elements()[0].accessor()));
-    EXPECT_CALL(process, Call(array.elements()[1].accessor())).WillOnce([]() { throw kException; });
-    EXPECT_CALL(process, Call(array.elements()[2].accessor())).Times(0);
+    EXPECT_CALL(process, Call(SameAccessor(array.elements()[0].accessor())));
+    EXPECT_CALL(process, Call(SameAccessor(array.elements()[1].accessor()))).WillOnce([]() { throw kException; });
+    EXPECT_CALL(process, Call(SameAccessor(array.elements()[2].accessor()))).Times(0);
     try {
         traverseObjectFields(array.header(), process.AsStdFunction());
     } catch (int exception) {

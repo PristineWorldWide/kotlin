@@ -42,9 +42,6 @@ public:
 
     ObjHeader** location() const noexcept { return &ref_; }
 
-    bool operator==(DirectRefAccessor other) const noexcept { return location() == other.location(); }
-    bool operator!=(DirectRefAccessor other) const noexcept { return !operator==(other); }
-
     ALWAYS_INLINE operator ObjHeader*() const noexcept { return load(); }
     ALWAYS_INLINE ObjHeader* operator=(ObjHeader* desired) noexcept { store(desired); return desired; }
 
@@ -104,9 +101,6 @@ public:
     RefAccessor(const RefAccessor& other) noexcept : direct_(other.direct_) {}
 
     DirectRefAccessor direct() const noexcept { return direct_; }
-
-    bool operator==(RefAccessor other) const noexcept { return direct_ == other.direct_; }
-    bool operator!=(RefAccessor other) const noexcept { return !operator==(other); }
 
     void beforeLoad() noexcept;
     void afterLoad() noexcept;
